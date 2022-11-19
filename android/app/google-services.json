@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "655703860206",
+    "project_id": "visionscreener-2",
+    "storage_bucket": "visionscreener-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655703860206:android:21d3adf15beeea473da4ff",
+        "android_client_info": {
+          "package_name": "com.CarolineGilleeny.go_check_kidz_dashboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655703860206-gbmhndijlbod17mef6l53v4duenm1n3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf0sHHInVcuLoZ_Dfe9lMcD9JOvSXTlp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655703860206-gbmhndijlbod17mef6l53v4duenm1n3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
