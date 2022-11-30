@@ -215,34 +215,29 @@ class ConfirmLogout extends StatelessWidget {
   }
 }
 
-void _showDialog(BuildContext context) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Warning!"),
-        content: Text("Do you really want to logout?"),
-        actions: [
-          MaterialButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-          ),
-          MaterialButton(
-            child: Text("Yes"),
-            onPressed: () {
-              GoogleSignIn().disconnect();
-              Navigator.of(context).pop(true);
-// Navigator.of(context).pushReplacement(
-//       MaterialPageRoute(
-//         builder: (context) => SignInPage(azureUsers: widget.azureUsers),
-//       ),
-//     );
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+// void _showDialog(BuildContext context) async {
+//   return await showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text("Warning!"),
+//         content: Text("Do you really want to logout?"),
+//         actions: [
+//           MaterialButton(
+//             child: Text("Cancel"),
+//             onPressed: () {
+//               Navigator.of(context).pop(false);
+//             },
+//           ),
+//           MaterialButton(
+//             child: Text("Yes"),
+//             onPressed: () {
+//               GoogleSignIn().disconnect();
+//               Navigator.of(context).pop(true);
+//             },
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }

@@ -14,9 +14,9 @@ class ImageCubit extends Cubit<ImageState> {
 
   ImageCubit(this.repository) : super(ImageInitial());
 
-  void fetchImage(String rowKey, String suffix) {
+  void fetchPortrait(String rowKey) {
     emit(ImageLoading());
-    repository.fetchImage(rowKey, suffix, cropBottom: true).then((memoryImage) {
+    repository.fetchImage(rowKey, '_full.jpg', cropBottom: true).then((memoryImage) {
       emit(ImageLoaded(memoryImage));
     }).catchError((error) {
       emit(ImageLoadingError(error.toString()));
@@ -24,11 +24,20 @@ class ImageCubit extends Cubit<ImageState> {
   }
 
   void fetchLeftEye(String rowKey) {
-    // emit(LeftImageLoading());
+    emit(ImageLoading());
     repository.fetchImage(rowKey, '_left_detection.png').then((memoryImage) {
-      emit(LeftImageLoaded(memoryImage, rowKey));
+      emit(ImageLoaded(memoryImage));
     }).catchError((error) {
-      emit(LeftImageLoadingError(error.toString(), rowKey));
+      emit(ImageLoadingError(error.toString()));
+    });
+  }
+
+  void fetchRightEye(String rowKey) {
+    emit(ImageLoading(),);
+    repository.fetchImage(rowKey, '_right_detection.png').then((memoryImage) {
+      emit(ImageLoaded(memoryImage,),);
+    }).catchError((error) {
+      emit(ImageLoadingError(error.toString(),),);
     });
   }
 

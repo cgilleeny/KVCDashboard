@@ -8,52 +8,32 @@ import 'package:image/image.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../cubit/image_cubit.dart';
+import '../data/eyepair_image/eyepair_image_repository_instance.dart';
 import '../data/model/eyepair.dart';
 import 'error_banner.dart';
 
 class FullImage extends StatefulWidget {
   final EyePair eyepair;
 
-  FullImage(this.eyepair, {Key? key}) : super(key: key);
+  const FullImage(this.eyepair, {Key? key}) : super(key: key);
 
   @override
   State<FullImage> createState() => _FullImageState();
 }
 
 class _FullImageState extends State<FullImage> with TickerProviderStateMixin {
-  // Uint8List? imageBytes;
   MemoryImage? portrait;
   String? errorMessage;
-  // late AnimationController _controller;
-  // late Animation<double> _animation;
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   // _controller =
-  //   //     AnimationController(vsync: this, duration: const Duration(seconds: 15));
-  //   //     _animation = CurvedAnimation(parent: _controller, curve: Curves.linearToEaseOut)
-  // }
-
-  // MemoryImage? _cropBottom(Uint8List imageBytes) {
-  //   final image = decodeImage(imageBytes);
-  //   if (image == null) {
-  //     return null;
-  //   }
-  //   print(
-  //       'image.width: ${image.width}, image.height: ${image.height}, w/.75 = ${image.width / 0.75}');
-  //   if (image.height > (image.width / 0.75).round()) {
-  //     final face =
-  //         copyCrop(image, 0, 0, image.width, (image.width / 0.75).round());
-  //     return MemoryImage(Uint8List.fromList(encodeJpg(face)));
-  //   }
-  //   return MemoryImage(imageBytes);
-  // }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ImageCubit, ImageState>(
+    return BlocProvider(
+                    create: (context) =>
+                        ImageCubit(ImageEyepairRepositoryInstance.repository)..fetchPortrait(widget.eyepair.rowKey),
+                    child: 
+    
+    
+    BlocListener<ImageCubit, ImageState>(
       listener: (context, state) {
         if (state is ImageLoaded) {
           if (state.memoryImage == null) {
@@ -70,10 +50,10 @@ class _FullImageState extends State<FullImage> with TickerProviderStateMixin {
         builder: ((context, state) {
           if (state is ImageLoaded && portrait == null) {
             if (state.memoryImage == null) {
-            errorMessage = 'Portrait image not found.';
+              errorMessage = 'Portrait image not found.';
             }
-          widget.eyepair.fullImage = state.memoryImage;
-          portrait = state.memoryImage;
+            widget.eyepair.fullImage = state.memoryImage;
+            portrait = state.memoryImage;
           }
 
           return AnimatedSize(
@@ -109,6 +89,7 @@ class _FullImageState extends State<FullImage> with TickerProviderStateMixin {
           );
         }),
       ),
+    ),
     );
   }
 }

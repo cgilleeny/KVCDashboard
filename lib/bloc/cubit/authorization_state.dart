@@ -1,3 +1,4 @@
+/*
 part of 'authorization_cubit.dart';
 
 abstract class AuthorizationState extends Equatable {
@@ -44,3 +45,4 @@ class AuthorizationFailed extends AuthorizationState {
   
   const AuthorizationFailed(this.errorDescription);
 }
+*/

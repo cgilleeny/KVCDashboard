@@ -38,9 +38,9 @@ class _AdminPageState extends State<AdminPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-              dashboardUsers = BlocProvider.of<DashboardUsersCubit>(context)
-          .repository
-          .dashboardUsers;
+        dashboardUsers = BlocProvider.of<DashboardUsersCubit>(context)
+            .repository
+            .dashboardUsers;
       });
     });
     // azureUsers = widget.azureUsers;
@@ -56,83 +56,75 @@ class _AdminPageState extends State<AdminPage> {
 
   void _insertDashboardUser() {
     showAnimatedDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return BasicDialog(
-              BasicDialogType.add, InsertDashboardUser(onInsertValue),
-              buttonsDef: [
-                DialogButton(
-                  'Cancel',
-                  true,
-                  onPressed: () {
-                    // final blocProvider =
-                    //     BlocProvider.of<AzureUsersBloc>(context);
-                    // blocProvider.add(ResetAzureUserToDefault());
-
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-                DialogButton(
-                  'Add',
-                  true,
-                  onPressed: () {
-                    // if (userToInsert == null) return;
-
-                    
-                    BlocProvider.of<DashboardUsersCubit>(context).insertDashboardUser(userToInsert!);
-                    // blocProvider.add(
-                    //   InsertDashboardUser(
-                    //     userToInsert,
-                    //   ),
-                    // );
-                  },
-                )
-              ]);
-        },
-                          animationType: DialogTransitionType.fade,
-                  curve: Curves.fastOutSlowIn,
-                  duration: const Duration(seconds: 1),);
+      context: context,
+      builder: (BuildContext context) {
+        return BasicDialog(
+          BasicDialogType.add,
+          InsertDashboardUser(onInsertValue),
+          buttonsDef: [
+            DialogButton(
+              'Cancel',
+              true,
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            DialogButton(
+              'Add',
+              true,
+              onPressed: () {
+                BlocProvider.of<DashboardUsersCubit>(context)
+                    .insertDashboardUser(userToInsert!);
+              },
+            ),
+          ],
+        );
+      },
+      animationType: DialogTransitionType.fade,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(seconds: 1),
+    );
   }
 
   void _updateDashboardUser(DashboardUser dashboardUser) {
     showAnimatedDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return BasicDialog(BasicDialogType.edit,
-              UpdateDashboardUser(dashboardUser, onUpdateValue),
-              buttonsDef: [
-                DialogButton(
-                  'Cancel',
-                  true,
-                  onPressed: () {
-                    final blocProvider =
-                        BlocProvider.of<DashboardUsersCubit>(context);
-                    // blocProvider.add(ResetAzureUserToDefault());
+      context: context,
+      builder: (BuildContext context) {
+        return BasicDialog(
+          BasicDialogType.edit,
+          UpdateDashboardUser(dashboardUser, onUpdateValue),
+          buttonsDef: [
+            DialogButton(
+              'Cancel',
+              true,
+              onPressed: () {
+                // final blocProvider =
+                //     BlocProvider.of<DashboardUsersCubit>(context);
+                Navigator.of(context).pop(false);
+              },
+            ),
+            DialogButton(
+              'Update',
+              true,
+              onPressed: () {
+                if (userToUpdate == null) {
+                  Navigator.of(context).pop(false);
+                  return;
+                }
 
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-                DialogButton(
-                  'Update',
-                  true,
-                  onPressed: () {
-                    final blocProvider =
-                        BlocProvider.of<DashboardUsersCubit>(context);
-                    if (userToUpdate == null) {
-                    //   blocProvider.add(ResetAzureUserToDefault());
-
-                      Navigator.of(context).pop(false);
-                      return;
-                    }
-                    blocProvider.updateDashboardUser(
-                        userToUpdate!,
-                      );}
-                    ),
-              ]);
-        },
-                          animationType: DialogTransitionType.fade,
-                  curve: Curves.fastOutSlowIn,
-                  duration: const Duration(seconds: 1),);
+                BlocProvider.of<DashboardUsersCubit>(context)
+                    .updateDashboardUser(
+                  userToUpdate!,
+                );
+              },
+            ),
+          ],
+        );
+      },
+      animationType: DialogTransitionType.fade,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(seconds: 1),
+    );
   }
 
   @override
@@ -167,7 +159,8 @@ class _AdminPageState extends State<AdminPage> {
                         if (_controller.offset <= -160.0 &&
                             state is! DashboardUsersLoading) {
                           // final provider =
-                              BlocProvider.of<DashboardUsersCubit>(context).fetchDashboardUsers();
+                          BlocProvider.of<DashboardUsersCubit>(context)
+                              .fetchDashboardUsers();
                           // provider.add(
                           //   const LoadAzureUsers(),
                           // );
@@ -181,7 +174,10 @@ class _AdminPageState extends State<AdminPage> {
                           itemBuilder: (_, i) {
                             final emailWithLineBreak =
                                 dashboardUsers[i].email.length > 25
-                                    ? dashboardUsers[i].email.split('@').join('\n@')
+                                    ? dashboardUsers[i]
+                                        .email
+                                        .split('@')
+                                        .join('\n@')
                                     : dashboardUsers[i].email;
                             return ListTile(
                               title: Text(emailWithLineBreak,

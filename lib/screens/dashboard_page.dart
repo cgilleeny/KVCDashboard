@@ -91,12 +91,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   children: [
                     if (state is EyepairsError)
                       ErrorBanner(state.errorDescription),
-                    // ? ErrorBanner(state.errorDescription)
-                    // : null,
                     Expanded(
                       child: NotificationListener<ScrollUpdateNotification>(
                         onNotification: (scrollNotification) {
-                          print('_controller.offset: ${_controller.offset}');
+                          // print('_controller.offset: ${_controller.offset}');
                           return false;
                         },
                         child: EyepairListView(
@@ -107,15 +105,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     // ].whereType<Widget>().toList(),
                   ],
                 ),
-                // : null,
                 if (state is EyepairsLoading)
                   const Center(
                     child: CircularProgressIndicator(),
                   ),
-                // ? const Center(
-                //     child: CircularProgressIndicator(),
-                //   )
-                // : null,
               ],
             ),
             floatingActionButton: Row(
@@ -196,54 +189,21 @@ class _EyepairListViewState extends State<EyepairListView> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
-      // eyeLoadIndex = 0;
       eyepairs = widget.eyepairs;
-      // if (eyepairs.isNotEmpty) {
-      //   BlocProvider.of<ImageCubit>(context).fetchEyepairImage(
-      //     widget.eyepairs[eyeLoadIndex],
-      //   );
-      // }
-      // if (eyepairs.isNotEmpty) {
-      //   BlocProvider.of<ImageCubit>(context).fetchEyepairImages(
-      //     eyepairs,
-      //   );
-      // }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-        // BlocListener<ImageCubit, ImageState>(
-        //   listener: ((context, state) {
-        //     if (state is ImagesLoaded) {
-        //       setState(() {
-        //         eyeLoadIndex++;
-        //       });
-        //       if (kDebugMode) {
-        //         print('eyeLoadIndex: $eyeLoadIndex');
-        //       }
-        //       if (eyepairs.length > eyeLoadIndex) {
-        //         BlocProvider.of<ImageCubit>(context).fetchEyepairImage(
-        //           eyepairs[eyeLoadIndex],
-        //         );
-        //       }
-        //     }
-        //   }),
-        //   child:
-        BlocBuilder<ImageCubit, ImageState>(
-      builder: (context, state) {
-        return ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemBuilder: (_, i) => EyepairView(eyepairs[i]),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: eyepairs.length,
-          controller: widget.controller,
-        );
-      },
+
+    return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemBuilder: (_, i) => EyepairView(eyepairs[i]),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: eyepairs.length,
+      controller: widget.controller,
     );
-    // );
   }
 }
 
@@ -258,27 +218,6 @@ class EyepairView extends StatefulWidget {
 }
 
 class _EyepairViewState extends State<EyepairView> {
-  void _displayFullImage(EyePair eyepair) {
-    showAnimatedDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return BasicDialog(BasicDialogType.portrait, FullImage(eyepair),
-            buttonsDef: [
-              DialogButton(
-                'Done',
-                true,
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-              ),
-            ]);
-      },
-      animationType: DialogTransitionType.fade,
-      curve: Curves.fastOutSlowIn,
-      duration: const Duration(milliseconds: 5000),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -318,12 +257,6 @@ class _EyepairViewState extends State<EyepairView> {
                         "symmetry_human_label":
                             fromClassification(classification)
                       };
-                      // BlocProvider.of<EyepairsBloc>(context).add(
-                      //   UpdateEyepair(
-                      //     widget.eyepair.rowKey!,
-                      //     map,
-                      //   ),
-                      // );
                     }
                   }),
                 ],
@@ -334,44 +267,40 @@ class _EyepairViewState extends State<EyepairView> {
               children: [
                 widget.eyepair.left != null
                     ? BlocProvider(
-      create: (context) =>
-          ImageCubit(ImageEyepairRepositoryInstance.repository),
-      child:                     Expanded(
-                        child: DetectionLeftEyeView(
-                            widget.eyepair.rowKey, widget.eyepair.left!,
-                            (Classification classification) {
-                          if (widget.eyepair.left?.humanLabel !=
-                              classification) {
-                            Map<String, dynamic> map = {
-                              "left_human_label":
-                                  fromClassification(classification)
-                            };
-                          }
-                        }),
-                      ),
-    )
-                    
-
+                        create: (context) => ImageCubit(
+                            ImageEyepairRepositoryInstance.repository),
+                        child: Expanded(
+                          child: DetectionLeftEyeView(
+                              widget.eyepair.rowKey, widget.eyepair.left!,
+                              (Classification classification) {
+                            if (widget.eyepair.left?.humanLabel !=
+                                classification) {
+                              Map<String, dynamic> map = {
+                                "left_human_label":
+                                    fromClassification(classification)
+                              };
+                            }
+                          }),
+                        ),
+                      )
                     : null,
                 widget.eyepair.right != null
-                    ? Expanded(
-                        child: DetectionRightEyeView(widget.eyepair.right!,
-                            (Classification classification) {
-                          if (widget.eyepair.right?.humanLabel !=
-                                  classification &&
-                              widget.eyepair.rowKey != null) {
-                            Map<String, dynamic> map = {
-                              "right_human_label":
-                                  fromClassification(classification)
-                            };
-                            // BlocProvider.of<EyepairsBloc>(context).add(
-                            //   UpdateEyepair(
-                            //     widget.eyepair.rowKey!,
-                            //     map,
-                            //   ),
-                            // );
-                          }
-                        }),
+                    ? BlocProvider(
+                        create: (context) => ImageCubit(
+                            ImageEyepairRepositoryInstance.repository),
+                        child: Expanded(
+                          child: DetectionRightEyeView(
+                              widget.eyepair.rowKey, widget.eyepair.right!,
+                              (Classification classification) {
+                            if (widget.eyepair.right?.humanLabel !=
+                                classification) {
+                              Map<String, dynamic> map = {
+                                "right_human_label":
+                                    fromClassification(classification)
+                              };
+                            }
+                          }),
+                        ),
                       )
                     : null,
               ].whereType<Widget>().toList(),
@@ -428,7 +357,7 @@ class FullImageButton extends StatefulWidget {
 }
 
 class _FullImageButtonState extends State<FullImageButton> {
-  void _displayFullImage(EyePair eyepair) {
+  void _displayFullImage(BuildContext context, EyePair eyepair) {
     showAnimatedDialog(
       context: context,
       builder: (BuildContext context) {
@@ -456,9 +385,7 @@ class _FullImageButtonState extends State<FullImageButton> {
       child: IconButton(
           onPressed: widget.eyepair.rowKey != 'Unknown RowKey'
               ? () async {
-                  BlocProvider.of<ImageCubit>(context)
-                      .fetchImage(widget.eyepair.rowKey, '_full.jpg');
-                  _displayFullImage(widget.eyepair);
+                  _displayFullImage(context, widget.eyepair);
                 }
               : null,
           iconSize: 45.0,
@@ -492,9 +419,7 @@ class _DetectionLeftEyeViewState extends State<DetectionLeftEyeView> {
     detectionImage = widget.eye.detectionImage;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (detectionImage == null) {
-        BlocProvider.of<ImageCubit>(context).fetchLeftEye(
-          widget.rowKey
-        );
+        BlocProvider.of<ImageCubit>(context).fetchLeftEye(widget.rowKey);
       }
     });
   }
@@ -502,108 +427,136 @@ class _DetectionLeftEyeViewState extends State<DetectionLeftEyeView> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ImageCubit, ImageState>(
-        listener: (listenerContext, state) {
-          if (state is LeftImageLoaded) {
-            if (state.memoryImage != null) {
+      listener: (listenerContext, state) {
+        if (state is ImageLoaded) {
+          if (state.memoryImage != null) {
             setState(() {
               detectionImage = state.memoryImage;
             });
-            }
           }
-        },
-        child:
-    BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
-
-      return Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Left Single Detection',
-              textAlign: TextAlign.center,
+        }
+      },
+      child: BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
+        return Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Left Single Detection',
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              detectionImage != null
-                  ? SizedBox(
-                      // color: Colors.blue,
-                      width: double.infinity,
-                      height: 85,
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        clipBehavior: Clip.hardEdge,
-                        child: FadeInImage(
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: detectionImage!),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                detectionImage != null
+                    ? SizedBox(
+                        // color: Colors.blue,
+                        width: double.infinity,
+                        height: 85,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          clipBehavior: Clip.hardEdge,
+                          child: FadeInImage(
+                              placeholder: MemoryImage(kTransparentImage),
+                              image: detectionImage!),
+                        ),
+                      )
+                    : const SizedBox(
+                        // width: 240,
+                        height: 85,
+                        child: Icon(
+                          Icons.visibility,
+                          size: 50,
+                        ),
                       ),
-                    )
-                  : const SizedBox(
-                      // width: 240,
-                      height: 85,
-                      child: Icon(
-                        Icons.visibility,
-                        size: 50,
-                      ),
-                    ),
-              ClassificationView(widget.eye, widget.onUpdateHumanLabel),
-            ].whereType<Widget>().toList(),
-          ),
-        ],
-      );
-    }),
+                ClassificationView(widget.eye, widget.onUpdateHumanLabel),
+              ].whereType<Widget>().toList(),
+            ),
+          ],
+        );
+      }),
     );
   }
 }
 
-class DetectionRightEyeView extends StatelessWidget {
+class DetectionRightEyeView extends StatefulWidget {
+  final String rowKey;
   final Eye eye;
   final void Function(Classification classification) onUpdateHumanLabel;
 
   const DetectionRightEyeView(
+    this.rowKey,
     this.eye,
     this.onUpdateHumanLabel,
   );
 
   @override
+  State<DetectionRightEyeView> createState() => _DetectionRightEyeViewState();
+}
+
+class _DetectionRightEyeViewState extends State<DetectionRightEyeView> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.eye.detectionImage == null) {
+        BlocProvider.of<ImageCubit>(context).fetchRightEye(widget.rowKey);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Right Single Detection',
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+    return BlocListener<ImageCubit, ImageState>(
+      listener: (listenerContext, state) {
+        if (state is ImageLoaded) {
+          if (state.memoryImage != null) {
+            widget.eye.detectionImage = state.memoryImage;
+          }
+        }
+      },
+      child: BlocBuilder<ImageCubit, ImageState>(builder: (context, state) {
+        return Column(
           children: [
-            eye.detectionImage != null
-                // ? Image.memory(eye.detectionImageBytes!)
-                ? SizedBox(
-                    width: double.infinity,
-                    height: 85,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      clipBehavior: Clip.hardEdge,
-                      child: FadeInImage(
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: eye.detectionImage!),
-                    ),
-                  )
-                : const SizedBox(
-                    height: 85,
-                    child: Icon(
-                      Icons.visibility,
-                      size: 50,
-                    ),
-                  ),
-            ClassificationView(eye, onUpdateHumanLabel),
-          ].whereType<Widget>().toList(),
-        ),
-      ],
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Right Single Detection',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                widget.eye.detectionImage != null
+                    // ? Image.memory(eye.detectionImageBytes!)
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: 85,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          clipBehavior: Clip.hardEdge,
+                          child: FadeInImage(
+                              placeholder: MemoryImage(kTransparentImage),
+                              image: widget.eye.detectionImage!),
+                        ),
+                      )
+                    : const SizedBox(
+                        height: 85,
+                        child: Icon(
+                          Icons.visibility,
+                          size: 50,
+                        ),
+                      ),
+                ClassificationView(widget.eye, widget.onUpdateHumanLabel),
+              ].whereType<Widget>().toList(),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

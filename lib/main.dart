@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   final authorizationRepository = AuthorizationRepository();
   final dashboardUserRepository = DashboardUserRepository(DashboardUserNetworkService());
     final eyepairRepository = EyepairRepository(EyepairNetworkService());
-    // final imageRepository = ImageRepository(ImageNetworkService());
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -52,9 +52,9 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   EyepairCubit(eyepairRepository)..fetchFirstPage(),
             ),
-            BlocProvider(
-              create: (context) => ImageCubit(ImageEyepairRepositoryInstance.repository),
-            ),
+            // BlocProvider(
+            //   create: (context) => ImageCubit(ImageEyepairRepositoryInstance.repository),
+            // ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
