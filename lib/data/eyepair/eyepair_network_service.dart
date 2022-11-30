@@ -75,7 +75,9 @@ class EyepairNetworkService with Azure {
         if (kDebugMode) {
           print(eyepair);
         }
-        return EyePair.fromMap(eyepair);
+        if (eyepair["RowKey"] != null) {
+          return EyePair.fromMap(eyepair);
+        }
       }
       return null;
     }).catchError((error) {

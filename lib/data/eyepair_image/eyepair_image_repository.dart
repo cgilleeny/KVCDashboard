@@ -43,16 +43,6 @@ class ImageRepository {
     final imageBytes = args[1] as Uint8List;
 
     final image = decodeImage(imageBytes);
-    // if (image != null) {
-    //   args[1] = null;
-    //   Isolate.exit(
-    //     p,
-    //     args,
-    //   );
-    // }
-
-    // print(
-        // 'image.width: ${image?.width}, image.height: ${image?.height}, w/.75 = ${image?.width / 0.75}');
     if (image != null && image.height > (image.width / 0.75).round()) {
       final face =
           copyCrop(image, 0, 0, image.width, (image.width / 0.75).round());

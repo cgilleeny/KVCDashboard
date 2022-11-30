@@ -23,21 +23,29 @@ class ImageCubit extends Cubit<ImageState> {
     });
   }
 
-  void fetchEyeImages(EyePair eyepair) {
+  void fetchLeftEye(String rowKey) {
+    // emit(LeftImageLoading());
+    repository.fetchImage(rowKey, '_left_detection.png').then((memoryImage) {
+      emit(LeftImageLoaded(memoryImage, rowKey));
+    }).catchError((error) {
+      emit(LeftImageLoadingError(error.toString(), rowKey));
+    });
+  }
+
+  void fetchEyepairImage(EyePair eyepair) {
     emit(ImagesLoading());
 
-    if (eyepair.rowKey != null) {
+    if (eyepair.rowKey != 'Unknown RowKey') {
       if (eyepair.right != null && eyepair.left != null) {
         repository
-            .fetchImage(eyepair.rowKey!, '_right_detection.png')
+            .fetchImage(eyepair.rowKey, '_right_detection.png')
             .then((memoryImage) {
+          eyepair.right?.detectionImage = memoryImage;
 
-            eyepair.right?.detectionImage = memoryImage;
-            
           // eyepair.right!.detectionImageBytes = imageBytes;
 
           repository
-              .fetchImage(eyepair.rowKey!, '_left_detection.png')
+              .fetchImage(eyepair.rowKey, '_left_detection.png')
               .then((memoryImage) {
             eyepair.left?.detectionImage = memoryImage;
             emit(ImagesLoaded());
@@ -49,5 +57,30 @@ class ImageCubit extends Cubit<ImageState> {
         });
       }
     }
+  }
+
+  void fetchEyepairImages(List<EyePair> eyepairs) async {
+    for (var eyepair in eyepairs) {
+      emit(ImagesLoading());
+      if (eyepair.rowKey != 'Unknown RowKey') {
+        if (eyepair.right != null && eyepair.left != null) {
+          try {
+            eyepair.right?.detectionImage = await repository.fetchImage(
+                eyepair.rowKey, '_right_detection.png');
+          } catch (error) {
+            emit(ImagesLoadingError(error.toString()));
+          }
+
+          try {
+            eyepair.left?.detectionImage = await repository.fetchImage(
+                eyepair.rowKey, '_left_detection.png');
+          } catch (error) {
+            emit(ImagesLoadingError(error.toString()));
+          }
+          emit(ImagesLoaded());
+        }
+      }
+    }
+    
   }
 }

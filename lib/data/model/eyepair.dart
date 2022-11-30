@@ -8,7 +8,7 @@ import './eye.dart';
 class EyePair {
   Eye? left;
   Eye? right;
-  String? rowKey;
+  final String rowKey;
   String? partitionKey;
   final DateTime? timestamp;
   String? key;
@@ -31,7 +31,7 @@ class EyePair {
   EyePair(
       {this.left,
       this.right,
-      this.rowKey,
+      required this.rowKey,
       this.partitionKey,
       timestamp,
       key,
@@ -54,7 +54,7 @@ class EyePair {
     return EyePair(
         left: left,
         right: right,
-        rowKey: map["RowKey"].runtimeType == String ? map["RowKey"] : null,
+        rowKey: map["RowKey"].runtimeType == String ? map["RowKey"] : 'Unknown RowKey',
         partitionKey: map["PartitionKey"].runtimeType == String
             ? map["PartitionKey"]
             : null,
@@ -83,12 +83,12 @@ class EyePair {
 
   String toJson() {
     const JsonEncoder encoder = JsonEncoder();
-    if (rowKey == null) {
+    if (rowKey == 'Unknown RowKey') {
       throw Exception('Missing Azure \'RowKey\' required for updating record');
     }
     var resBody = {};
     resBody["PartitionKey"] = "main";
-    resBody["RowKey"] = rowKey!;
+    resBody["RowKey"] = rowKey;
     if (timestamp != null) {
       resBody["Timestamp"] = timestamp?.toIso8601String();
     }

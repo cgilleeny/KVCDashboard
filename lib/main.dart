@@ -13,6 +13,7 @@ import 'data/eyepair/eyepair_network_service.dart';
 import 'data/eyepair/eyepair_repository.dart';
 import 'data/eyepair_image/eyepair_image_network_service.dart';
 import 'data/eyepair_image/eyepair_image_repository.dart';
+import 'data/eyepair_image/eyepair_image_repository_instance.dart';
 import 'screens/signin_page.dart';
 
 void main() async {
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   final authorizationRepository = AuthorizationRepository();
   final dashboardUserRepository = DashboardUserRepository(DashboardUserNetworkService());
     final eyepairRepository = EyepairRepository(EyepairNetworkService());
-    final imageRepository = ImageRepository(ImageNetworkService());
+    // final imageRepository = ImageRepository(ImageNetworkService());
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
                   EyepairCubit(eyepairRepository)..fetchFirstPage(),
             ),
             BlocProvider(
-              create: (context) => ImageCubit(imageRepository),
+              create: (context) => ImageCubit(ImageEyepairRepositoryInstance.repository),
             ),
       ],
       child: MaterialApp(
