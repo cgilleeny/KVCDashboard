@@ -5,6 +5,8 @@ import 'package:go_check_kidz_dashboard/UI/shared/basic_dialog.dart';
 import 'package:go_check_kidz_dashboard/screens/signin_page.dart';
 import 'package:go_check_kidz_dashboard/widgets/update_dashboard_user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../cubit/authorization_cubit.dart';
 import '../cubit/dashboard_users_cubit.dart';
@@ -48,143 +50,168 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return BlocBuilder<DashboardUsersCubit, DashboardUsersState>(
-      builder: ((context, state) {
-              if (state is DashboardUserFound) {
-              authenticatedUser = state.dashboardUser;  
+        builder: ((context, state) {
+      if (state is DashboardUserFound) {
+        authenticatedUser = state.dashboardUser;
       }
-        return PopupMenuButton<int>(
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: 1,
-              onTap: () {},
-              enabled: authenticatedUser?.admin ?? false,
-              child: Row(
-                children: const [
-                  Icon(Icons.admin_panel_settings),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Admin Page")
-                ],
-              ),
+      return PopupMenuButton<int>(
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: 1,
+            onTap: () {},
+            enabled: authenticatedUser?.admin ?? false,
+            child: Row(
+              children: const [
+                Icon(Icons.admin_panel_settings),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Admin Page")
+              ],
             ),
-            PopupMenuItem(
-              value: 2,
-              // row with two children
-              child: Row(
-                children: const [
-                  Icon(Icons.info),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Info Dialog")
-                ],
-              ),
+          ),
+          PopupMenuItem(
+            value: 2,
+            // row with two children
+            child: Row(
+              children: const [
+                Icon(Icons.info),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Info")
+              ],
             ),
-            PopupMenuItem(
-              value: 3,
-              // row with two children
-              child: Row(
-                children: const [
-                  Icon(Icons.check),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Success Dialog")
-                ],
-              ),
+          ),
+          PopupMenuItem(
+            value: 3,
+            // row with two children
+            child: Row(
+              children: const [
+                Icon(Icons.logout),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Sign Out")
+              ],
             ),
-            PopupMenuItem(
-              value: 4,
-              // row with two children
-              child: Row(
-                children: const [
-                  Icon(Icons.warning),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Warning Dialog")
-                ],
-              ),
+          ),
+          PopupMenuItem(
+            value: 4,
+            // row with two children
+            child: Row(
+              children: const [
+                Icon(Icons.warning),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Warning Dialog")
+              ],
             ),
-            PopupMenuItem(
-              value: 5,
-              // row with two children
-              child: Row(
-                children: const [
-                  Icon(Icons.error),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Error Dialog")
-                ],
-              ),
+          ),
+          PopupMenuItem(
+            value: 5,
+            // row with two children
+            child: Row(
+              children: const [
+                Icon(Icons.error),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Error Dialog")
+              ],
             ),
-          ].toList(),
-          offset: Offset(0, 100),
-          color: Colors.grey,
-          elevation: 2,
-          // on selected we show the dialog box
-          onSelected: (value) async {
-            // if value 1 show dialog
-            if (value == 1) {
-              Navigator.of(context).push(CustomPageRoute(child:  AdminPage()),
-              );
-            } else if (value == 2) {
-              bool continueLogout = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BasicDialog(
-                        BasicDialogType.info,
-                        Text(
-                          verbal,
-                        ),
-                        buttonsDef: [DialogButton('Continue', true)]);
-                  }) as bool;
-            } else if (value == 3) {
-              bool continueLogout = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BasicDialog(
-                        BasicDialogType.success,
-                        Text(
-                          verbal,
-                        ),
-                        buttonsDef: [DialogButton('Continue', true)]);
-                  }) as bool;
-            } else if (value == 4) {
-              bool continueLogout = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BasicDialog(
-                        BasicDialogType.warning,
-                        Text(
-                          verbal,
-                        ),
-                        buttonsDef: [
-                          DialogButton('Cancel', false),
-                          DialogButton('OK', true)
-                        ]);
-                  }) as bool;
-            } else if (value == 5) {
-              bool continueLogout = await showDialog<bool>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BasicDialog(
-                        BasicDialogType.error,
-                        Text(
-                          verbal,
-                        ),
-                        buttonsDef: [
-                          DialogButton('Cancel', false),
-                          DialogButton('Continue', true)
-                        ]);
-                  }) as bool;
+          ),
+        ].toList(),
+        offset: Offset(0, 100),
+        color: Colors.grey,
+        elevation: 2,
+        // on selected we show the dialog box
+        onSelected: (value) async {
+          // if value 1 show dialog
+          if (value == 1) {
+            Navigator.of(context).push(
+              CustomPageRoute(child: AdminPage()),
+            );
+          } else if (value == 2) {
+            bool continueLogout = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return BasicDialog(
+                      BasicDialogType.info,
+                      Text(
+                        verbal,
+                      ),
+                      buttonsDef: [DialogButton('Continue', true)]);
+                }) as bool;
+          } else if (value == 3) {
+            bool continueLogout = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return BasicDialog(
+                      BasicDialogType.warning,
+                      const Text(
+                        'Are you sure about signing out?',
+                      ),
+                      buttonsDef: [
+                        DialogButton('Cancel', false),
+                        DialogButton('Continue', true),
+                      ]);
+                }) as bool;
+                final appleSignInAvailable = await TheAppleSignIn.isAvailable();
+            if (!continueLogout || !mounted) {
+              return;
             }
-          }, // onSelected
-        );
-      }
-  ));
+
+            
+      
+            BlocProvider.of<DashboardUsersCubit>(context)
+                .fetchDashboardUsers();
+            BlocProvider.of<AuthorizationCubit>(context).signOut();
+            SharedPreferences.getInstance()
+                .then((sharedPreferences) => sharedPreferences.setString(
+                      'socialPlatform',
+                      'none',
+                    ));
+
+            Navigator.of(context).pushReplacement(
+              CustomPageRoute(
+                child: SignInPage(appleSignInAvailable),
+              ),
+            );
+
+          } else if (value == 4) {
+            bool continueLogout = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return BasicDialog(
+                      BasicDialogType.warning,
+                      Text(
+                        verbal,
+                      ),
+                      buttonsDef: [
+                        DialogButton('Cancel', false),
+                        DialogButton('OK', true)
+                      ]);
+                }) as bool;
+          } else if (value == 5) {
+            bool continueLogout = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return BasicDialog(
+                      BasicDialogType.error,
+                      Text(
+                        verbal,
+                      ),
+                      buttonsDef: [
+                        DialogButton('Cancel', false),
+                        DialogButton('Continue', true)
+                      ]);
+                }) as bool;
+          }
+        }, // onSelected
+      );
+    }));
   }
 }
 

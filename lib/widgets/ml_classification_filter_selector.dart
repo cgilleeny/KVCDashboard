@@ -37,6 +37,16 @@ class _MLClassificationFilterSelectorState
   }
 
   @override
+  void didUpdateWidget(covariant MLClassificationFilterSelector oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      mlSingle = widget.filter.byMLSingle;
+      mlSymmetry = widget.filter.byMLSymmetry;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +64,7 @@ class _MLClassificationFilterSelectorState
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
-          child: CustomPopupMenuButton(
+          child: ClassificationPopupMenuButton(
             classification: mlSymmetry,
             iconData: Icons.contrast,
             onSelected: (value) {
@@ -76,7 +86,7 @@ class _MLClassificationFilterSelectorState
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
-          child: CustomPopupMenuButton(
+          child: ClassificationPopupMenuButton(
             classification: mlSingle,
             iconData: Icons.visibility,
             onSelected: (value) {

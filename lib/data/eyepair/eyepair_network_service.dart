@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import '../../azure.dart';
 import '../../keys/azure_connection_strings.dart';
+import '../model/classification.dart';
 import '../model/filter.dart';
 // import '../model/azure_user.dart';
 import '../model/eyepair.dart';

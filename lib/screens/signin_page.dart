@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:go_check_kidz_dashboard/cubit/authorization_cubit.dart';
 import 'package:go_check_kidz_dashboard/cubit/dashboard_users_cubit.dart';
 import 'package:go_check_kidz_dashboard/screens/dashboard_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_apple_sign_in/apple_sign_in_button.dart' as i_button;
 import '../data/model/dashboard_user.dart';
 import '../utils/custom_page_route.dart';
 import '../widgets/error_banner.dart';
@@ -16,8 +17,9 @@ enum SocialPlatform {
 }
 
 class SignInPage extends StatefulWidget {
+  final bool appleSignInAvailable;
 
-  const SignInPage({Key? key}) : super(key: key);
+  const SignInPage(this.appleSignInAvailable, {Key? key}) : super(key: key);
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -26,8 +28,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   String? socialEmail;
   String? errorDescription;
-  List<DashboardUser> dashboardUsers = [];
-
+  bool dashboardUsersInitialized = false;
+  bool isSilentlyAuthorized = false;
   SocialPlatform? socialPlatform;
 
   void _navigateToDashboard(BuildContext context) {
@@ -40,12 +42,20 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     Navigator.of(context).pushReplacement(
-      CustomPageRoute(
-          child: DashboardPage(
-            socialEmail!,
-          ),
-      ),
+      isSilentlyAuthorized  // don't animate if we never showed the signin page
+          ? MaterialPageRoute(
+              builder: (context) => const DashboardPage(),
+            )
+          : CustomPageRoute(
+              child: const DashboardPage(),
+            ),
     );
+
+    // Navigator.of(context).pushReplacement(
+    //   CustomPageRoute(
+    //     child: const DashboardPage(),
+    //   ),
+    // );
   }
 
   @override
@@ -55,17 +65,19 @@ class _SignInPageState extends State<SignInPage> {
         BlocListener<AuthorizationCubit, AuthorizationState>(
           listener: (context, state) {
             if (state is SilentlyAuthorized) {
-              // print('state is SilentlyAuthorized');
+              isSilentlyAuthorized = true;
               socialEmail = state.socialEmail.toLowerCase();
-              if (dashboardUsers.isNotEmpty) {
+              if (dashboardUsersInitialized) {
                 BlocProvider.of<DashboardUsersCubit>(context)
                     .fetchDashboardUser(socialEmail!);
               }
             }
+            if (state is SilentAuthorizationFailed) {
+              FlutterNativeSplash.remove();
+            }
             if (state is Authorized) {
-              // print('state is Authorized');
               socialEmail = state.socialEmail.toLowerCase();
-              if (dashboardUsers.isNotEmpty) {
+              if (dashboardUsersInitialized) {
                 BlocProvider.of<DashboardUsersCubit>(context)
                     .fetchDashboardUser(socialEmail!);
               }
@@ -75,7 +87,7 @@ class _SignInPageState extends State<SignInPage> {
         BlocListener<DashboardUsersCubit, DashboardUsersState>(
           listener: (context, state) {
             if (state is DashboardUsersLoaded) {
-              dashboardUsers = state.dashboardUsers;
+              dashboardUsersInitialized = true;
               if (socialEmail != null) {
                 BlocProvider.of<DashboardUsersCubit>(context)
                     .fetchDashboardUser(socialEmail!);
@@ -92,8 +104,7 @@ class _SignInPageState extends State<SignInPage> {
             }
             if (state is DashboardUserNotFound) {
               setState(() {
-                errorDescription =
-                    'Counld not find dashboard user $socialEmail!.';
+                errorDescription = 'Unrecognized dashboard user: $socialEmail.';
               });
             }
             if (state is DashboardUsersLoadError) {
@@ -109,17 +120,16 @@ class _SignInPageState extends State<SignInPage> {
         return Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Social Sign In',
+              'KVC Dashboard',
             ),
           ),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                state is AuthorizationFailed
-                    ? ErrorBanner(state.errorDescription)
-                    : null,
-                errorDescription != null ? ErrorBanner(errorDescription) : null,
+                if (state is AuthorizationFailed)
+                  ErrorBanner(state.errorDescription),
+                if (errorDescription != null) ErrorBanner(errorDescription),
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -127,17 +137,28 @@ class _SignInPageState extends State<SignInPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SignInButton(
-                          Buttons.Apple,
-                          text: 'Apple Sign In',
-                          onPressed: () {
-                            socialPlatform = SocialPlatform.apple;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 25,
-                          width: 220,
-                        ),
+                        if (widget.appleSignInAvailable)
+                          SignInButton(
+                            Buttons.Apple,
+                            text: 'Apple Sign In',
+                            onPressed: () {
+                              if (state is! SilentlyAuthorizing) {
+                                setState(() {
+                                  errorDescription = null;
+                                });
+                                BlocProvider.of<DashboardUsersCubit>(context)
+                                    .reset();
+                                socialPlatform = SocialPlatform.apple;
+                                BlocProvider.of<AuthorizationCubit>(context)
+                                    .appleSignIn();
+                              }
+                            },
+                          ),
+                        if (widget.appleSignInAvailable)
+                          const SizedBox(
+                            height: 25,
+                            width: 220,
+                          ),
                         SignInButton(
                           Buttons.GoogleDark,
                           text: 'Google Sign In',
@@ -154,16 +175,9 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ],
                     ),
-                    state is SilentlyAuthorizing
-                        ? const CircularProgressIndicator()
-                        : null,
-                    state is Authorizing
-                        ? const CircularProgressIndicator()
-                        : null,
-                    state is AuthorizationFailed ? Text('falied') : null,
-                  ].whereType<Widget>().toList(),
+                  ],
                 ),
-              ].whereType<Widget>().toList(),
+              ],
             ),
           ),
         );

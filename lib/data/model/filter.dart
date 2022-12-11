@@ -9,7 +9,7 @@ enum DateFilter {
   thisWeek('This Week'),
   lastWeek('Last Week'),
   thisMonth('This Month'),
-  thisYear('Last Year'),
+  thisYear('This Year'),
   custom('Custom');
 
   const DateFilter(this.title);
@@ -31,6 +31,31 @@ class Filter {
       this.byHandLabeledSymmetry = Classification.any,
       this.byMLSingle = Classification.any,
       this.byHandLabeledSingle = Classification.any});
+
+  Filter copyWith(
+      {DateTimeRange? range,
+      DateFilter? byDate,
+      Classification? byMLSymmetry,
+      Classification? byHandLabeledSymmetry,
+      Classification? byMLSingle,
+      Classification? byHandLabeledSingle}) {
+    return Filter(
+        range: range ?? this.range,
+        byDate: byDate ?? this.byDate,
+        byMLSymmetry: byMLSymmetry ?? this.byMLSymmetry,
+        byHandLabeledSymmetry:
+            byHandLabeledSymmetry ?? this.byHandLabeledSymmetry,
+        byMLSingle: byMLSingle ?? this.byMLSingle,
+        byHandLabeledSingle: byHandLabeledSingle ?? this.byHandLabeledSingle);
+  }
+
+  bool get isDefault {
+    return byDate == DateFilter.none &&
+    byMLSymmetry == Classification.any &&
+    byHandLabeledSymmetry == Classification.any &&
+    byMLSingle == Classification.any &&
+    byHandLabeledSingle == Classification.any;
+  }
 
   @override
   bool operator ==(Object other) {

@@ -35,7 +35,7 @@ class _BasicDialogState extends State<BasicDialog> {
         onPressed: widget.buttonsDef[index].onPressed ??
             () =>
                 Navigator.of(context).pop(widget.buttonsDef[index].returnValue),
-        child: Text(widget.buttonsDef[index].title),
+        child: Text(widget.buttonsDef[index].title, style: const TextStyle(color: Colors.black)),
       ),
     );
   }

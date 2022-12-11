@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../data/model/classification.dart';
 
-
-
 const List<Choice> settingChoices = <Choice>[
   Choice(
       name: 'Pass',
@@ -27,7 +25,7 @@ const List<Choice> settingChoices = <Choice>[
 const anyClassification = Choice(
   name: 'All',
   classification: Classification.any,
-  color: Colors.white,
+  color: Colors.grey,
 );
 
 class Choice {
@@ -35,9 +33,51 @@ class Choice {
   final Classification classification;
   final Color color;
 
-  const Choice({required this.name, required this.classification, required this.color});
+  const Choice(
+      {required this.name, required this.classification, required this.color});
 }
 
+class ClassificationPopupMenuButton extends StatelessWidget {
+  final Classification classification;
+  final IconData iconData;
+  final List<Choice> choices;
+  final void Function(Choice) onSelected;
+
+  const ClassificationPopupMenuButton(
+      {required this.classification,
+      required this.iconData,
+      required this.onSelected,
+      this.choices = settingChoices});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<Choice>(
+      elevation: 20,
+      color: Colors.transparent,
+      onSelected: (value) {
+        onSelected(value);
+      },
+      itemBuilder: (BuildContext context) {
+        return choices.skip(0).map((Choice choice) {
+          return ClassificationPopupMenuItem<Choice>(
+            key: const Key('key'),
+            value: choice,
+            color: choice.color,
+            child: Text(choice.name, style: const TextStyle(fontSize: 12.0)),
+          );
+        }).toList();
+      },
+      child: ButtonView(
+        icon: Icon(
+          iconData,
+        ),
+        choice: choices[classification.index],
+      ),
+    );
+  }
+}
+
+/*
 class CustomPopupMenuButton extends StatefulWidget {
   final Classification classification;
   // final Choice choice;
@@ -57,48 +97,38 @@ class CustomPopupMenuButton extends StatefulWidget {
 }
 
 class _CustomPopupMenuButtonState extends State<CustomPopupMenuButton> {
-  // late Choice _selectedOption;
-
   @override
   Widget build(BuildContext context) {
-    return
-        // ignore: dead_code
-
-        PopupMenuButton<Choice>(
-            elevation: 20,
-            color: Colors.transparent,
-            onSelected: (value) {
-              // setState(() {
-              //   _selectedOption = value;
-              // });
-              widget.onSelected(value);
-            },
-            itemBuilder: (BuildContext context) {
-              return widget.choices.skip(0).map((Choice choice) {
-                return CustomPopupMenuItem<Choice>(
-                  key: const Key('key'),
-                  value: choice,
-                  color: choice.color,
-                  child: Text(
-                    choice.name,
-                    style: TextStyle(fontSize: 12.0)
-                  ),
-                );
-              }).toList();
-            },
-            child: ButtonView(
-              icon: Icon(
-                widget.iconData,
-              ),
-              choice: widget.choices[widget.classification.index],
-            ));
+    return PopupMenuButton<Choice>(
+      elevation: 20,
+      color: Colors.transparent,
+      onSelected: (value) {
+        widget.onSelected(value);
+      },
+      itemBuilder: (BuildContext context) {
+        return widget.choices.skip(0).map((Choice choice) {
+          return ClassificationPopupMenuItem<Choice>(
+            key: const Key('key'),
+            value: choice,
+            color: choice.color,
+            child: Text(choice.name, style: const TextStyle(fontSize: 12.0)),
+          );
+        }).toList();
+      },
+      child: ButtonView(
+        icon: Icon(
+          widget.iconData,
+        ),
+        choice: widget.choices[widget.classification.index],
+      ),
+    );
   }
 }
-
-class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
+*/
+class ClassificationPopupMenuItem<T> extends PopupMenuItem<T> {
   final Color color;
 
-  const CustomPopupMenuItem({
+  const ClassificationPopupMenuItem({
     required Key key,
     required T value,
     bool enabled = true,
@@ -116,7 +146,7 @@ class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
 }
 
 class _CustomPopupMenuItemState<T>
-    extends PopupMenuItemState<T, CustomPopupMenuItem<T>> {
+    extends PopupMenuItemState<T, ClassificationPopupMenuItem<T>> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -132,10 +162,11 @@ class _CustomPopupMenuItemState<T>
 class ButtonView extends StatelessWidget {
   final Icon icon;
   final Choice choice;
-  double width;
+  final double width;
   // final String title;
   // final Color color;
-  ButtonView({required this.icon, required this.choice, this.width = 170});
+  const ButtonView(
+      {required this.icon, required this.choice, this.width = 170});
 
   @override
   Widget build(BuildContext context) {
@@ -151,11 +182,9 @@ class ButtonView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: icon,
           ),
-          Text(
-            choice.name,
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 12.0)
-          ),
+          Text(choice.name,
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontSize: 12.0)),
         ],
       ),
     );

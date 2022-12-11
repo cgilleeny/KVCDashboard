@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>655703860206-24c5algfgl1eq0gvq27rs8sfleimaono.apps.googleusercontent.com</string>
+	<string>655703860206-hsl16uv0mrv3qcj9vujseo6jh8dqr623.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.655703860206-24c5algfgl1eq0gvq27rs8sfleimaono</string>
+	<string>com.googleusercontent.apps.655703860206-hsl16uv0mrv3qcj9vujseo6jh8dqr623</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>655703860206-ic6dsr9lojts09ihfhg9d2u44btinvf2.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCfMBAtAu1J4oxBy2U6e7vTvQSD3RNMZAk</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.CarolineGilleeny.GoCheckKidzDashboard</string>
+	<string>com.healthaccess.kvcdashboard</string>
 	<key>PROJECT_ID</key>
 	<string>visionscreener-2</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:655703860206:ios:4a48a68d44ac83a53da4ff</string>
+	<string>1:655703860206:ios:06f2d8edaf8ed9833da4ff</string>
 </dict>
 </plist>

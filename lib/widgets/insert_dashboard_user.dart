@@ -26,6 +26,14 @@ class _InsertDashboardUserState extends State<InsertDashboardUser> {
       write = newWrite;
       admin = newAdmin;
     });
+    widget.onInsertValue(
+      DashboardUser(
+        email: controller.text,
+        read: read,
+        write: write,
+        admin: admin,
+      ),
+    );
   }
 
   @override
@@ -55,21 +63,12 @@ class _InsertDashboardUserState extends State<InsertDashboardUser> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(
+                          keyboardType: TextInputType.emailAddress,
                           autofocus: true,
                           showCursor: true,
                           cursorColor: Colors.black,
                           textAlign: TextAlign.start,
                           onSubmitted: (value) {
-                            widget.onInsertValue(
-                              DashboardUser(
-                                email: value,
-                                read: read,
-                                write: write,
-                                admin: admin,
-                              ),
-                            );
-                          },
-                          onChanged: (value) {
                             widget.onInsertValue(
                               DashboardUser(
                                 email: value,

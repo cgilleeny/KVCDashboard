@@ -9,17 +9,17 @@ abstract class AuthorizationState extends Equatable {
 
 class AuthorizationInitial extends AuthorizationState {}
 
-class GoogleSilentlyAuthenticated extends AuthorizationInitial {
-  final GoogleSignInAccount googleUser;
+// class GoogleSilentlyAuthenticated extends AuthorizationInitial {
+//   final GoogleSignInAccount googleUser;
 
-  GoogleSilentlyAuthenticated(this.googleUser);
-}
+//   GoogleSilentlyAuthenticated(this.googleUser);
+// }
 
-class GoogleSilentlyAuthorizing extends AuthorizationState {}
+// class GoogleSilentlyAuthorizing extends AuthorizationState {}
 
-class GoogleSilentAuthorizationFailed extends AuthorizationState {}
+// class GoogleSilentAuthorizationFailed extends AuthorizationState {}
 
-class GoogleAuthorizing extends AuthorizationState {}
+// class GoogleAuthorizing extends AuthorizationState {}
 
 class SilentlyAuthorized extends AuthorizationState {
   final String socialEmail;
@@ -44,3 +44,6 @@ class AuthorizationFailed extends AuthorizationState {
   
   const AuthorizationFailed(this.errorDescription);
 }
+
+class SigningOut extends AuthorizationState {}
+class SignedOut extends AuthorizationState {}

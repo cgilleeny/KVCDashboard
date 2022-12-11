@@ -37,6 +37,16 @@ class _HandClassificationFilterSelectorState
   }
 
   @override
+  void didUpdateWidget(covariant HandClassificationFilterSelector oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      handLabeledSingle = widget.filter.byHandLabeledSingle;
+      handLabeledSymmetry = widget.filter.byHandLabeledSymmetry;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +64,7 @@ class _HandClassificationFilterSelectorState
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
-          child: CustomPopupMenuButton(
+          child: ClassificationPopupMenuButton(
             classification: handLabeledSymmetry,
             iconData: Icons.contrast,
             onSelected: (value) {
@@ -76,7 +86,7 @@ class _HandClassificationFilterSelectorState
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
-          child: CustomPopupMenuButton(
+          child: ClassificationPopupMenuButton(
             classification: handLabeledSingle,
             iconData: Icons.visibility,
             onSelected: (value) {

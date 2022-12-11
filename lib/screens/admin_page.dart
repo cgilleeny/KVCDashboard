@@ -66,6 +66,7 @@ class _AdminPageState extends State<AdminPage> {
               'Cancel',
               true,
               onPressed: () {
+                BlocProvider.of<DashboardUsersCubit>(context).reset();
                 Navigator.of(context).pop(false);
               },
             ),
@@ -98,8 +99,7 @@ class _AdminPageState extends State<AdminPage> {
               'Cancel',
               true,
               onPressed: () {
-                // final blocProvider =
-                //     BlocProvider.of<DashboardUsersCubit>(context);
+                BlocProvider.of<DashboardUsersCubit>(context).reset();
                 Navigator.of(context).pop(false);
               },
             ),
@@ -107,14 +107,9 @@ class _AdminPageState extends State<AdminPage> {
               'Update',
               true,
               onPressed: () {
-                if (userToUpdate == null) {
-                  Navigator.of(context).pop(false);
-                  return;
-                }
-
                 BlocProvider.of<DashboardUsersCubit>(context)
                     .updateDashboardUser(
-                  userToUpdate!,
+                  userToUpdate,
                 );
               },
             ),
@@ -144,72 +139,68 @@ class _AdminPageState extends State<AdminPage> {
         },
         child: BlocBuilder<DashboardUsersCubit, DashboardUsersState>(
           builder: (blocContext, state) {
-            return Stack(
-              children: [
-                Column(
-                  children: [
-                    state is DashboardUsersLoadError
-                        ? ErrorBanner(state.errorDescription)
-                        : null,
-                    NotificationListener<ScrollNotification>(
-                      onNotification: (scrollNotification) {
-                        if (kDebugMode) {
-                          print('_controller.offset: ${_controller.offset}');
-                        }
-                        if (_controller.offset <= -160.0 &&
-                            state is! DashboardUsersLoading) {
-                          // final provider =
-                          BlocProvider.of<DashboardUsersCubit>(context)
-                              .fetchDashboardUsers();
-                          // provider.add(
-                          //   const LoadAzureUsers(),
-                          // );
-                        }
-                        return false;
-                      },
-                      child: Expanded(
-                        child: ListView.separated(
-                          padding: const EdgeInsets.only(bottom: 56),
-                          itemCount: dashboardUsers.length,
-                          itemBuilder: (_, i) {
-                            final emailWithLineBreak =
-                                dashboardUsers[i].email.length > 25
-                                    ? dashboardUsers[i]
-                                        .email
-                                        .split('@')
-                                        .join('\n@')
-                                    : dashboardUsers[i].email;
-                            return ListTile(
-                              title: Text(emailWithLineBreak,
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
-                              subtitle:
-                                  PermissionsSubtitleWidget(dashboardUsers[i]),
-                              trailing: IconButton(
-                                onPressed: () =>
-                                    _updateDashboardUser(dashboardUsers[i]),
-                                icon: const Icon(
-                                  Icons.edit,
+            return SafeArea(
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      if (state is DashboardUsersLoadError)
+                          ErrorBanner(state.errorDescription),
+                      NotificationListener<ScrollNotification>(
+                        onNotification: (scrollNotification) {
+                          if (kDebugMode) {
+                            print('_controller.offset: ${_controller.offset}');
+                          }
+                          if (_controller.offset <= -160.0 &&
+                              state is! DashboardUsersLoading) {
+                            BlocProvider.of<DashboardUsersCubit>(context)
+                                .fetchDashboardUsers();
+                          }
+                          return false;
+                        },
+                        child: Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.only(bottom: 56),
+                            itemCount: dashboardUsers.length,
+                            itemBuilder: (_, i) {
+                              final emailWithLineBreak =
+                                  dashboardUsers[i].email.length > 25
+                                      ? dashboardUsers[i]
+                                          .email
+                                          .split('@')
+                                          .join('\n@')
+                                      : dashboardUsers[i].email;
+                              return ListTile(
+                                title: Text(emailWithLineBreak,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                                subtitle: PermissionsSubtitleWidget(
+                                    dashboardUsers[i]),
+                                trailing: IconButton(
+                                  onPressed: () =>
+                                      _updateDashboardUser(dashboardUsers[i]),
+                                  icon: const Icon(
+                                    Icons.edit,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Divider();
-                          },
-                          scrollDirection: Axis.vertical,
-                          controller: _controller,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const Divider();
+                            },
+                            scrollDirection: Axis.vertical,
+                            controller: _controller,
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  if (state is DashboardUsersLoading)
+                    const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ].whereType<Widget>().toList(),
-                ),
-                state is DashboardUsersLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : null,
-              ].whereType<Widget>().toList(),
+                ],
+              ),
             );
           },
         ),
