@@ -6,8 +6,6 @@ import 'package:go_check_kidz_dashboard/cubit/authorization_cubit.dart';
 import 'package:go_check_kidz_dashboard/cubit/dashboard_users_cubit.dart';
 import 'package:go_check_kidz_dashboard/screens/dashboard_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:the_apple_sign_in/apple_sign_in_button.dart' as i_button;
-import '../data/model/dashboard_user.dart';
 import '../utils/custom_page_route.dart';
 import '../widgets/error_banner.dart';
 
@@ -42,7 +40,7 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     Navigator.of(context).pushReplacement(
-      isSilentlyAuthorized  // don't animate if we never showed the signin page
+      isSilentlyAuthorized // don't animate if we never showed the signin page
           ? MaterialPageRoute(
               builder: (context) => const DashboardPage(),
             )
@@ -50,12 +48,6 @@ class _SignInPageState extends State<SignInPage> {
               child: const DashboardPage(),
             ),
     );
-
-    // Navigator.of(context).pushReplacement(
-    //   CustomPageRoute(
-    //     child: const DashboardPage(),
-    //   ),
-    // );
   }
 
   @override
@@ -91,6 +83,8 @@ class _SignInPageState extends State<SignInPage> {
               if (socialEmail != null) {
                 BlocProvider.of<DashboardUsersCubit>(context)
                     .fetchDashboardUser(socialEmail!);
+              } else {
+                FlutterNativeSplash.remove();
               }
             }
             if (state is DashboardUserFound) {

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-enum AzureUserPermission {
-  read,
-  write,
-  admin,
-}
+// enum AzureUserPermission {
+//   read,
+//   write,
+//   admin,
+// }
 
-class AzureUserPermissionsView extends StatefulWidget {
-  bool read;
-  bool write;
-  bool admin;
-  bool isEdit;
+class DashboardUserPermissionView extends StatefulWidget {
+  final bool read;
+  final bool write;
+  final bool admin;
+  final bool isEdit;
   // final Function(
   //   AzureUserPermission permission,
   //   bool permissionValue,
@@ -21,7 +21,7 @@ class AzureUserPermissionsView extends StatefulWidget {
     bool newAdmin,
   )? onChange;
 
-  AzureUserPermissionsView(
+  DashboardUserPermissionView(
       {this.onChange,
       this.read = true,
       this.write = false,
@@ -31,11 +31,12 @@ class AzureUserPermissionsView extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<AzureUserPermissionsView> createState() =>
+  State<DashboardUserPermissionView> createState() =>
       _AzureUserPermissionsViewState();
 }
 
-class _AzureUserPermissionsViewState extends State<AzureUserPermissionsView> {
+class _AzureUserPermissionsViewState
+    extends State<DashboardUserPermissionView> {
   late bool _read;
   late bool _write;
   late bool _admin;
@@ -73,7 +74,7 @@ class _AzureUserPermissionsViewState extends State<AzureUserPermissionsView> {
     //   AzureUserPermission.write,
     //   value,
     // );
-        widget.onChange?.call(
+    widget.onChange?.call(
       _read,
       _write,
       _admin,

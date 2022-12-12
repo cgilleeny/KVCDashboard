@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_check_kidz_dashboard/cubit/dashboard_users_cubit.dart';
-import 'package:go_check_kidz_dashboard/widgets/azure_user_permissions_view.dart';
+import 'package:go_check_kidz_dashboard/widgets/dashboard_user_permission_view.dart';
 import 'package:go_check_kidz_dashboard/widgets/error_banner.dart';
 import '../data/model/dashboard_user.dart';
 
@@ -57,7 +57,7 @@ class UpdateDashboardUser extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: AzureUserPermissionsView(
+                        child: DashboardUserPermissionView(
                           onChange: _onChange,
                           read: dashboardUser.read,
                           write: dashboardUser.write,

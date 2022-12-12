@@ -4,7 +4,7 @@ import 'package:go_check_kidz_dashboard/cubit/dashboard_users_cubit.dart';
 import 'package:go_check_kidz_dashboard/widgets/error_banner.dart';
 
 import '../data/model/dashboard_user.dart';
-import 'azure_user_permissions_view.dart';
+import 'dashboard_user_permission_view.dart';
 
 class InsertDashboardUser extends StatefulWidget {
   final void Function(DashboardUser dashboardUser) onInsertValue;
@@ -96,7 +96,7 @@ class _InsertDashboardUserState extends State<InsertDashboardUser> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: AzureUserPermissionsView(
+                        child: DashboardUserPermissionView(
                           onChange: _onChange,
                           read: true,
                           write: false,
