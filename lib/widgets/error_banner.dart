@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class ErrorBanner extends StatelessWidget {
   final String? text;
 
-  const ErrorBanner(this.text);
+  const ErrorBanner(this.text, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -10,12 +10,6 @@ import 'package:go_check_kidz_dashboard/cubit/authorization_cubit.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import 'cubit/dashboard_users_cubit.dart';
 import 'cubit/eyepair_cubit.dart';
-// import 'cubit/image_cubit.dart';
-import 'data/eyepair/eyepair_network_service.dart';
-import 'data/eyepair/eyepair_repository.dart';
-// import 'data/eyepair_image/eyepair_image_network_service.dart';
-// import 'data/eyepair_image/eyepair_image_repository.dart';
-// import 'data/eyepair_image/eyepair_image_repository_instance.dart';
 import 'data/eyepair/eyepair_repository_instance.dart';
 import 'screens/signin_page.dart';
 

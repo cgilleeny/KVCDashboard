@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_check_kidz_dashboard/cubit/eyepair_cubit.dart';
@@ -10,8 +9,8 @@ import '../data/model/filter.dart';
 
 class FilterPage extends StatefulWidget {
 
-  // ignore: use_key_in_widget_constructors
-  const FilterPage();
+  const FilterPage({Key? key,
+  }) : super(key: key);
 
   @override
   State<FilterPage> createState() => _FilterPageState();
@@ -158,14 +157,12 @@ class _FilterBoxState extends State<FilterBox> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     content = widget.content;
   }
 
   @override
   void didUpdateWidget(covariant FilterBox oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
       content = widget.content;

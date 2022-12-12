@@ -1,10 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_check_kidz_dashboard/UI/shared/basic_dialog.dart';
 import 'package:go_check_kidz_dashboard/screens/signin_page.dart';
-import 'package:go_check_kidz_dashboard/widgets/update_dashboard_user.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
@@ -16,9 +13,8 @@ import '../screens/admin_page.dart';
 import '../utils/custom_page_route.dart';
 
 class MoreMenuButton extends StatefulWidget {
-  // GoogleSignInAccount user;
-  // List<AzureUser> azureUsers;
-  MoreMenuButton({Key? key}) : super(key: key);
+
+  const MoreMenuButton({Key? key}) : super(key: key);
 
   @override
   State<MoreMenuButton> createState() => _MoreMenuButtonState();
@@ -32,7 +28,6 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       socialEmail =
@@ -48,7 +43,6 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
       'Hello this fine morning.  I hope all is well with ya today.  Im trying to really use up some space here';
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return BlocBuilder<DashboardUsersCubit, DashboardUsersState>(
         builder: ((context, state) {
       if (state is DashboardUserFound) {
@@ -123,7 +117,7 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
             ),
           ),
         ].toList(),
-        offset: Offset(0, 100),
+        offset: const Offset(0, 100),
         color: Colors.grey,
         elevation: 2,
         // on selected we show the dialog box
@@ -131,10 +125,10 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
           // if value 1 show dialog
           if (value == 1) {
             Navigator.of(context).push(
-              CustomPageRoute(child: AdminPage()),
+              CustomPageRoute(child: const AdminPage()),
             );
           } else if (value == 2) {
-            bool continueLogout = await showDialog<bool>(
+            await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) {
                   return BasicDialog(
@@ -143,7 +137,7 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                         verbal,
                       ),
                       buttonsDef: [DialogButton('Continue', true)]);
-                }) as bool;
+                });
           } else if (value == 3) {
             bool continueLogout = await showDialog<bool>(
                 context: context,
@@ -158,15 +152,12 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                         DialogButton('Continue', true),
                       ]);
                 }) as bool;
-                final appleSignInAvailable = await TheAppleSignIn.isAvailable();
+            final appleSignInAvailable = await TheAppleSignIn.isAvailable();
             if (!continueLogout || !mounted) {
               return;
             }
 
-            
-      
-            BlocProvider.of<DashboardUsersCubit>(context)
-                .fetchDashboardUsers();
+            BlocProvider.of<DashboardUsersCubit>(context).fetchDashboardUsers();
             BlocProvider.of<AuthorizationCubit>(context).signOut();
             SharedPreferences.getInstance()
                 .then((sharedPreferences) => sharedPreferences.setString(
@@ -179,9 +170,8 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                 child: SignInPage(appleSignInAvailable),
               ),
             );
-
           } else if (value == 4) {
-            bool continueLogout = await showDialog<bool>(
+            await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) {
                   return BasicDialog(
@@ -193,9 +183,9 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                         DialogButton('Cancel', false),
                         DialogButton('OK', true)
                       ]);
-                }) as bool;
+                });
           } else if (value == 5) {
-            bool continueLogout = await showDialog<bool>(
+            await showDialog<bool>(
                 context: context,
                 builder: (BuildContext context) {
                   return BasicDialog(
@@ -207,7 +197,7 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                         DialogButton('Cancel', false),
                         DialogButton('Continue', true)
                       ]);
-                }) as bool;
+                });
           }
         }, // onSelected
       );
@@ -221,11 +211,11 @@ class ConfirmLogout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Warning!"),
-      content: Text("Do you really want to logout?"),
+      title: const Text("Warning!"),
+      content: const Text("Do you really want to logout?"),
       actions: [
         MaterialButton(
-          child: Text("Cancel"),
+          child: const Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop(false);
           },

@@ -30,7 +30,6 @@ class _EyepairViewState extends State<EyepairView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     eyepair = widget.eyepair;
     dateString = eyepair.timestamp != null
@@ -40,8 +39,7 @@ class _EyepairViewState extends State<EyepairView> {
 
   @override
   void didUpdateWidget(covariant EyepairView oldWidget) {
-    // TODO: implement didUpdateWidget
-
+    super.didUpdateWidget(oldWidget);
     setState(() {
       eyepair = widget.eyepair;
       dateString = eyepair.timestamp != null
@@ -52,8 +50,6 @@ class _EyepairViewState extends State<EyepairView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     assert(debugCheckHasMaterial(context));
 
     return Padding(

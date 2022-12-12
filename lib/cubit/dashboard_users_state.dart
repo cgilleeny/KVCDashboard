@@ -12,9 +12,9 @@ class DashboardUsersInitial extends DashboardUsersState {}
 class DashboardUsersLoading extends DashboardUsersState {}
 
 class DashboardUsersLoaded extends DashboardUsersState {
-  List<DashboardUser> dashboardUsers;
+  final List<DashboardUser> dashboardUsers;
 
-  DashboardUsersLoaded(this.dashboardUsers);
+  const DashboardUsersLoaded(this.dashboardUsers);
 }
 
 class DashboardUsersLoadError extends DashboardUsersState {
@@ -43,12 +43,10 @@ class DashboardUserInsertError extends DashboardUsersState {
   const DashboardUserInsertError(this.errorDescription);
 }
 
-
 class DashboardUserFound extends DashboardUsersState {
-  DashboardUser dashboardUser;
-DashboardUserFound(this.dashboardUser);
-
+  final DashboardUser dashboardUser;
+  
+  const DashboardUserFound(this.dashboardUser);
 }
 
-class DashboardUserNotFound extends DashboardUsersState {
-}
+class DashboardUserNotFound extends DashboardUsersState {}

@@ -12,7 +12,7 @@ class ClassificationView extends StatelessWidget {
   const ClassificationView(
     this.eye,
     this.onUpdateHumanLabel,
-  );
+  {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

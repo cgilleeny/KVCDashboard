@@ -27,7 +27,6 @@ class _BasicDialogState extends State<BasicDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     buttonWidgets = List.generate(
       widget.buttonsDef.length,

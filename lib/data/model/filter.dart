@@ -73,4 +73,8 @@ class Filter {
         other.byMLSingle == byMLSingle &&
         other.byHandLabeledSingle == byHandLabeledSingle;
   }
+  
+  @override
+  int get hashCode => super.hashCode;
+  
 }

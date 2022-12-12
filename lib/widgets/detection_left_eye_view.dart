@@ -12,11 +12,11 @@ class DetectionLeftEyeView extends StatefulWidget {
   final String rowKey;
   final Eye eye;
 
-
   const DetectionLeftEyeView(
     this.rowKey,
-    this.eye,
-  );
+    this.eye, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DetectionLeftEyeView> createState() => _DetectionLeftEyeViewState();
@@ -27,9 +27,7 @@ class _DetectionLeftEyeViewState extends State<DetectionLeftEyeView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // detectionImage = widget.eye.detectionImage;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.eye.detectionImage == null) {
         BlocProvider.of<ImageCubit>(context).fetchLeftEye(widget.rowKey);
@@ -39,7 +37,6 @@ class _DetectionLeftEyeViewState extends State<DetectionLeftEyeView> {
 
   @override
   void didUpdateWidget(covariant DetectionLeftEyeView oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (widget.eye.detectionImage == null) {
       BlocProvider.of<ImageCubit>(context).fetchLeftEye(widget.rowKey);

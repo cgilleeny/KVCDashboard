@@ -43,11 +43,13 @@ class ClassificationPopupMenuButton extends StatelessWidget {
   final List<Choice> choices;
   final void Function(Choice) onSelected;
 
-  const ClassificationPopupMenuButton(
-      {required this.classification,
-      required this.iconData,
-      required this.onSelected,
-      this.choices = settingChoices});
+  const ClassificationPopupMenuButton({
+    required this.classification,
+    required this.iconData,
+    required this.onSelected,
+    this.choices = settingChoices,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class ClassificationPopupMenuButton extends StatelessWidget {
       },
       itemBuilder: (BuildContext context) {
         return choices.skip(0).map((Choice choice) {
-          return ClassificationPopupMenuItem<Choice>(
+          return CustomPopupMenuItem<Choice>(
             key: const Key('key'),
             value: choice,
             color: choice.color,
@@ -77,76 +79,23 @@ class ClassificationPopupMenuButton extends StatelessWidget {
   }
 }
 
-/*
-class CustomPopupMenuButton extends StatefulWidget {
-  final Classification classification;
-  // final Choice choice;
-  final IconData iconData;
-  final List<Choice> choices;
-  final void Function(Choice) onSelected;
-
-  const CustomPopupMenuButton(
-      {required this.classification,
-      // required this.choices,
-      required this.iconData,
-      required this.onSelected,
-      this.choices = settingChoices});
-
-  @override
-  State<CustomPopupMenuButton> createState() => _CustomPopupMenuButtonState();
-}
-
-class _CustomPopupMenuButtonState extends State<CustomPopupMenuButton> {
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<Choice>(
-      elevation: 20,
-      color: Colors.transparent,
-      onSelected: (value) {
-        widget.onSelected(value);
-      },
-      itemBuilder: (BuildContext context) {
-        return widget.choices.skip(0).map((Choice choice) {
-          return ClassificationPopupMenuItem<Choice>(
-            key: const Key('key'),
-            value: choice,
-            color: choice.color,
-            child: Text(choice.name, style: const TextStyle(fontSize: 12.0)),
-          );
-        }).toList();
-      },
-      child: ButtonView(
-        icon: Icon(
-          widget.iconData,
-        ),
-        choice: widget.choices[widget.classification.index],
-      ),
-    );
-  }
-}
-*/
-class ClassificationPopupMenuItem<T> extends PopupMenuItem<T> {
+class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
   final Color color;
 
-  const ClassificationPopupMenuItem({
+  const CustomPopupMenuItem({
     required Key key,
     required T value,
     bool enabled = true,
     required Widget child,
     required this.color,
-  }) : super(
-          key: key,
-          value: value,
-          enabled: enabled,
-          child: child,
-        );
+  }) : super(key: key, value: value, enabled: enabled, child: child);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomPopupMenuItemState<T> createState() => _CustomPopupMenuItemState<T>();
 }
 
-class _CustomPopupMenuItemState<T>
-    extends PopupMenuItemState<T, ClassificationPopupMenuItem<T>> {
+class _CustomPopupMenuItemState<T> extends PopupMenuItemState<T, CustomPopupMenuItem<T>> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -163,14 +112,16 @@ class ButtonView extends StatelessWidget {
   final Icon icon;
   final Choice choice;
   final double width;
-  // final String title;
-  // final Color color;
-  const ButtonView(
-      {required this.icon, required this.choice, this.width = 170});
+
+  const ButtonView({
+    required this.icon,
+    required this.choice,
+    this.width = 170,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       color: choice.color,
       width: width,

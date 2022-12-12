@@ -27,15 +27,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
 @override
   void initState() {
-    // TODO: implement initState
-    
+    super.initState();
     FlutterNativeSplash.remove();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return MultiBlocListener(
       listeners: [
         BlocListener<EyepairCubit, EyepairState>(
@@ -58,9 +55,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   icon: Icon(_filterIsDefault
                       ? Icons.filter_list_off
                       : Icons.filter_list_sharp),
-                  color: theme.appBarTheme.actionsIconTheme != null
-                      ? theme.appBarTheme.actionsIconTheme!.color
-                      : theme.primaryIconTheme.color,
                   onPressed: () async {
                     final isDefault = await Navigator.of(context)
                         .push(CustomPageRoute(child: const FilterPage()));
@@ -71,7 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     }
                   },
                 ),
-                MoreMenuButton(),
+                const MoreMenuButton(),
               ],
               title: const Text('KVC Dashboard'),
             ),
@@ -127,14 +121,12 @@ class _EyepairListViewState extends State<EyepairListView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     eyepairs = widget.eyepairs;
   }
 
   @override
   void didUpdateWidget(covariant EyepairListView oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
       eyepairs = widget.eyepairs;

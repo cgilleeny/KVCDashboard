@@ -16,8 +16,9 @@ class DetectionRightEyeView extends StatefulWidget {
   const DetectionRightEyeView(
     this.rowKey,
     this.eye,
-    // this.onUpdateHumanLabel,
-  );
+{
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DetectionRightEyeView> createState() => _DetectionRightEyeViewState();
@@ -26,7 +27,6 @@ class DetectionRightEyeView extends StatefulWidget {
 class _DetectionRightEyeViewState extends State<DetectionRightEyeView> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -38,7 +38,6 @@ class _DetectionRightEyeViewState extends State<DetectionRightEyeView> {
 
   @override
   void didUpdateWidget(covariant DetectionRightEyeView oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
       if (widget.eye.detectionImage == null) {

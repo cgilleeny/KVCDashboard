@@ -21,7 +21,7 @@ class DashboardUserPermissionView extends StatefulWidget {
     bool newAdmin,
   )? onChange;
 
-  DashboardUserPermissionView(
+  const DashboardUserPermissionView(
       {this.onChange,
       this.read = true,
       this.write = false,
@@ -102,7 +102,6 @@ class _AzureUserPermissionsViewState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _read = widget.read;
     _write = widget.write;

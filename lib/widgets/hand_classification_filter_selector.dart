@@ -14,7 +14,11 @@ class HandClassificationFilterSelector extends StatefulWidget {
   final Function(HandClassificationCategory newHandClassificationCategory,
       Classification newClassification) onChange;
 
-  const HandClassificationFilterSelector(this.filter, this.onChange);
+  const HandClassificationFilterSelector(
+    this.filter,
+    this.onChange, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HandClassificationFilterSelector> createState() =>
@@ -29,16 +33,13 @@ class _HandClassificationFilterSelectorState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // filter = widget.filter;
     handLabeledSingle = widget.filter.byHandLabeledSingle;
     handLabeledSymmetry = widget.filter.byHandLabeledSymmetry;
   }
 
   @override
   void didUpdateWidget(covariant HandClassificationFilterSelector oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
       handLabeledSingle = widget.filter.byHandLabeledSingle;

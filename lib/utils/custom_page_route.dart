@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class CustomPageRoute extends PageRouteBuilder {
   final Widget child;
@@ -14,7 +13,6 @@ class CustomPageRoute extends PageRouteBuilder {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    // TODO: implement buildTransitions
     return SlideTransition(
       position: Tween<Offset>(begin: getBeginOffset(), end: Offset.zero)
           .animate(animation),

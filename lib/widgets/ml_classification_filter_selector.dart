@@ -14,7 +14,7 @@ class MLClassificationFilterSelector extends StatefulWidget {
   final Function(MLClassificationCategory newMLClassificationCategory,
       Classification newClassification) onChange;
 
-  const MLClassificationFilterSelector(this.filter, this.onChange);
+  const MLClassificationFilterSelector(this.filter, this.onChange, {Key? key}) : super(key: key);
 
   @override
   State<MLClassificationFilterSelector> createState() =>
@@ -29,7 +29,6 @@ class _MLClassificationFilterSelectorState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // filter = widget.filter;
     mlSingle = widget.filter.byMLSingle;
@@ -38,7 +37,6 @@ class _MLClassificationFilterSelectorState
 
   @override
   void didUpdateWidget(covariant MLClassificationFilterSelector oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
       mlSingle = widget.filter.byMLSingle;

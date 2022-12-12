@@ -1,9 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_check_kidz_dashboard/data/eyepair/eyepair_repository.dart';
-
-import '../data/model/classification.dart';
-import '../data/model/eyepair.dart';
 import '../data/model/filter.dart';
 import '../data/model/page.dart';
 

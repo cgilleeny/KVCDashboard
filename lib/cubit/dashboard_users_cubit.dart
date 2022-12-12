@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/dashboard_user/dashboard_user_repository.dart';
 import '../data/model/dashboard_user.dart';

@@ -1,18 +1,12 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 import '../cubit/authorization_cubit.dart';
 import '../cubit/dashboard_users_cubit.dart';
-
 import '../data/model/dashboard_user.dart';
 
 class ProfilePage extends StatefulWidget {
-  // GoogleSignInAccount user;
 
-
-  ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -25,7 +19,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       socialEmail =

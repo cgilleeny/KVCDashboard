@@ -16,10 +16,8 @@ enum AdminAction {
 }
 
 class AdminPage extends StatefulWidget {
-  // GoogleSignInAccount user;
-  // List<AzureUser> azureUsers;
 
-  AdminPage({Key? key}) : super(key: key);
+  const AdminPage({Key? key}) : super(key: key);
 
   @override
   State<AdminPage> createState() => _AdminPageState();
@@ -28,13 +26,11 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   final _controller = ScrollController();
   List<DashboardUser> dashboardUsers = [];
-  // List<AzureUser> azureUsers = [];
   DashboardUser? userToUpdate;
   DashboardUser? userToInsert;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -43,7 +39,6 @@ class _AdminPageState extends State<AdminPage> {
             .dashboardUsers;
       });
     });
-    // azureUsers = widget.azureUsers;
   }
 
   void onUpdateValue(DashboardUser userToUpdate) {
@@ -215,8 +210,8 @@ class _AdminPageState extends State<AdminPage> {
 }
 
 class PermissionsSubtitleWidget extends StatelessWidget {
-  // final AzureUser azureUser;
   final DashboardUser dashboardUser;
+  
   const PermissionsSubtitleWidget(
     this.dashboardUser, {
     Key? key,

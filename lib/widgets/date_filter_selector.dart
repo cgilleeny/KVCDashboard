@@ -7,7 +7,9 @@ class DateFilterSelector extends StatefulWidget {
   final DateTimeRange? range;
   final Function(DateTimeRange? newRange, DateFilter newDateFilter) onChange;
 
-  const DateFilterSelector(this.dateFilter, this.range, this.onChange);
+  const DateFilterSelector(this.dateFilter, this.range, this.onChange, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DateFilterSelector> createState() => _DateFilterSelectorState();
@@ -19,7 +21,6 @@ class _DateFilterSelectorState extends State<DateFilterSelector> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dateFilter = widget.dateFilter;
     range = widget.range;
@@ -27,7 +28,6 @@ class _DateFilterSelectorState extends State<DateFilterSelector> {
 
   @override
   void didUpdateWidget(covariant DateFilterSelector oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setState(() {
       dateFilter = widget.dateFilter;
@@ -68,8 +68,7 @@ class _DateFilterSelectorState extends State<DateFilterSelector> {
     return AnimatedSize(
       curve: Curves.linearToEaseOut,
       duration: const Duration(seconds: 1),
-      child: Container(
-        child: Column(
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
@@ -220,7 +219,6 @@ class _DateFilterSelectorState extends State<DateFilterSelector> {
             ),
           ],
         ),
-      ),
     );
   }
 }

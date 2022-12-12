@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 
 import '../../azure.dart';
 import '../../keys/azure_connection_strings.dart';
-import '../model/azure_user.dart';
 import '../model/dashboard_user.dart';
 
 class DashboardUserNetworkService with Azure {

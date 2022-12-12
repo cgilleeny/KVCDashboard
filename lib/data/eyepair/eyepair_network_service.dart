@@ -1,16 +1,9 @@
 import 'dart:convert';
-// import 'dart:math';
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:http/http.dart' as http;
-
 import '../../azure.dart';
 import '../../keys/azure_connection_strings.dart';
-import '../model/classification.dart';
 import '../model/filter.dart';
-// import '../model/azure_user.dart';
 import '../model/eyepair.dart';
 import '../model/page.dart';
 
@@ -70,7 +63,6 @@ class EyepairNetworkService with Azure {
       if (dashboardeyepairs is! List<dynamic>) {
         expectedField('value');
       }
-      final List<EyePair> eyepairs = [];
 
       for (var eyepair in dashboardeyepairs) {
         if (kDebugMode) {
