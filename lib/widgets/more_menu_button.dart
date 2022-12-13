@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_check_kidz_dashboard/UI/shared/basic_dialog.dart';
+import 'package:go_check_kidz_dashboard/cubit/eyepair_cubit.dart';
 import 'package:go_check_kidz_dashboard/screens/signin_page.dart';
+import 'package:go_check_kidz_dashboard/widgets/user_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
@@ -38,9 +40,7 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
       }
     });
   }
-
-  final verbal =
-      'Hello this fine morning.  I hope all is well with ya today.  Im trying to really use up some space here';
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DashboardUsersCubit, DashboardUsersState>(
@@ -52,7 +52,7 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
         itemBuilder: (context) => [
           PopupMenuItem(
             value: 1,
-            onTap: () {},
+            // onTap: () {},
             enabled: authenticatedUser?.admin ?? false,
             child: Row(
               children: const [
@@ -66,20 +66,19 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
           ),
           PopupMenuItem(
             value: 2,
-            // row with two children
+            enabled: authenticatedUser == null ? false : true,
             child: Row(
               children: const [
-                Icon(Icons.info),
+                Icon(Icons.portrait),
                 SizedBox(
                   width: 10,
                 ),
-                Text("Info")
+                Text("Profile")
               ],
             ),
           ),
           PopupMenuItem(
             value: 3,
-            // row with two children
             child: Row(
               children: const [
                 Icon(Icons.logout),
@@ -90,39 +89,11 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
               ],
             ),
           ),
-          PopupMenuItem(
-            value: 4,
-            // row with two children
-            child: Row(
-              children: const [
-                Icon(Icons.warning),
-                SizedBox(
-                  width: 10,
-                ),
-                Text("Warning Dialog")
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: 5,
-            // row with two children
-            child: Row(
-              children: const [
-                Icon(Icons.error),
-                SizedBox(
-                  width: 10,
-                ),
-                Text("Error Dialog")
-              ],
-            ),
-          ),
         ].toList(),
         offset: const Offset(0, 100),
         color: Colors.grey,
         elevation: 2,
-        // on selected we show the dialog box
         onSelected: (value) async {
-          // if value 1 show dialog
           if (value == 1) {
             Navigator.of(context).push(
               CustomPageRoute(child: const AdminPage()),
@@ -132,11 +103,9 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                 context: context,
                 builder: (BuildContext context) {
                   return BasicDialog(
-                      BasicDialogType.info,
-                      Text(
-                        verbal,
-                      ),
-                      buttonsDef: [DialogButton('Continue', true)]);
+                      BasicDialogType.portrait,
+                      UserProfile(authenticatedUser!),
+                      buttonsDef: [DialogButton('OK', true)]);
                 });
           } else if (value == 3) {
             bool continueLogout = await showDialog<bool>(
@@ -170,34 +139,7 @@ class _MoreMenuButtonState extends State<MoreMenuButton> {
                 child: SignInPage(appleSignInAvailable),
               ),
             );
-          } else if (value == 4) {
-            await showDialog<bool>(
-                context: context,
-                builder: (BuildContext context) {
-                  return BasicDialog(
-                      BasicDialogType.warning,
-                      Text(
-                        verbal,
-                      ),
-                      buttonsDef: [
-                        DialogButton('Cancel', false),
-                        DialogButton('OK', true)
-                      ]);
-                });
-          } else if (value == 5) {
-            await showDialog<bool>(
-                context: context,
-                builder: (BuildContext context) {
-                  return BasicDialog(
-                      BasicDialogType.error,
-                      Text(
-                        verbal,
-                      ),
-                      buttonsDef: [
-                        DialogButton('Cancel', false),
-                        DialogButton('Continue', true)
-                      ]);
-                });
+            // BlocProvider.of<EyepairCubit>(context).fetchFirstPage();
           }
         }, // onSelected
       );

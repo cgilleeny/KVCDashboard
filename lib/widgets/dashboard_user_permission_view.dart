@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 
-// enum AzureUserPermission {
-//   read,
-//   write,
-//   admin,
-// }
-
 class DashboardUserPermissionView extends StatefulWidget {
   final bool read;
   final bool write;
   final bool admin;
   final bool isEdit;
-  // final Function(
-  //   AzureUserPermission permission,
-  //   bool permissionValue,
-  // )? onChange;
+
   final Function(
     bool newRead,
     bool newWrite,

@@ -5,39 +5,49 @@ import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 class AuthorizationRepository {
   // bool appleSignInAvailable;
   String? socialEmail;
+  String? socialPlatform;
 
   AuthorizationRepository();
 
   Future<String?> signInSilently(
-    String previousSocialEmail,
+    String previousSocialPlatform,
   ) async {
-    if (previousSocialEmail == 'google') {
+    if (previousSocialPlatform == 'google') {
       final googleUser = await GoogleSignIn().signInSilently();
-      socialEmail = googleUser?.email;
-      return socialEmail;
+      // socialEmail = googleUser?.email;
+      if (googleUser?.email != null) {
+        socialPlatform = 'google';
+      }
+      return googleUser?.email;
     }
 
-    if (previousSocialEmail == 'apple') {
-      return _appleSignInSilently();
+    if (previousSocialPlatform == 'apple') {
+      final appleUser = await _appleSignInSilently();
+      if (appleUser != null) {
+        socialPlatform = 'apple';
+        return appleUser;
+      }
     }
-    return socialEmail;
+    return null;
   }
 
   Future<void> signOut() async {
-    if (socialEmail == null) {
+    if (socialPlatform == null) {
       return;
     }
-    if (socialEmail == 'google') {
+    if (socialPlatform == 'google') {
       await GoogleSignIn().signOut();
-      socialEmail == null;
+      socialPlatform == null;
       return;
     }
   }
 
   Future<String?> googleSignIn() async {
     final googleUser = await GoogleSignIn().signIn();
-    socialEmail = googleUser?.email;
-    return socialEmail;
+    if (googleUser?.email != null) {
+      socialPlatform = 'google';
+    }
+    return googleUser?.email;
   }
 
   Future<String?> _appleSignInSilently() async {
@@ -48,6 +58,7 @@ class AuthorizationRepository {
     if (userId != null) {
       final credentialState = await TheAppleSignIn.getCredentialState(userId);
       if (credentialState.status == CredentialStatus.authorized) {
+        socialPlatform = 'apple';
         return sharedPreferences.getString('appleEmail');
       }
     }
@@ -76,9 +87,13 @@ class AuthorizationRepository {
         }
 
         if (credential.email == null) {
-          return sharedPreferences.getString(
+          final appleEmail = sharedPreferences.getString(
             "appleEmail",
           );
+          if (appleEmail != null && appleEmail.isNotEmpty) {
+            socialPlatform = 'apple';
+            return appleEmail;
+          }
         }
         sharedPreferences.setString("appleEmail", credential.email!);
         return credential.email;

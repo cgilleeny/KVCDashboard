@@ -29,6 +29,12 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        BlocProvider.of<EyepairCubit>(context)
+            .fetchFirstPage();
+      });
+    });
   }
 
   @override

@@ -10,15 +10,16 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
   final AuthorizationRepository repository;
   AuthorizationCubit(this.repository) : super(AuthorizationInitial());
 
-  void signInSilently(String? previousSocialEmail, bool appleSignInAvailable) {
-    if (previousSocialEmail == null) {
+  void signInSilently(
+      String? previousSocialPlatform, bool appleSignInAvailable) {
+    if (previousSocialPlatform == null) {
       return emit(SilentAuthorizationFailed());
     }
-    if (previousSocialEmail == 'apple' && !appleSignInAvailable) {
+    if (previousSocialPlatform == 'apple' && !appleSignInAvailable) {
       return emit(SilentAuthorizationFailed());
     }
     emit(SilentlyAuthorizing());
-    repository.signInSilently(previousSocialEmail).then((socialEmail) {
+    repository.signInSilently(previousSocialPlatform).then((socialEmail) {
       if (socialEmail == null) {
         return emit(SilentAuthorizationFailed());
       }
@@ -61,11 +62,12 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
     });
   }
 
-
   void signOut() {
     emit(SigningOut());
     repository.signOut().then((_) {
-      emit(SignedOut(),);
+      emit(
+        SignedOut(),
+      );
     }).catchError((error) {
       if (kDebugMode) {
         print(error);
