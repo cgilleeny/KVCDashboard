@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_check_kidz_dashboard/UI/shared/basic_dialog.dart';
-import 'package:go_check_kidz_dashboard/cubit/eyepair_cubit.dart';
 import 'package:go_check_kidz_dashboard/screens/signin_page.dart';
 import 'package:go_check_kidz_dashboard/widgets/user_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';

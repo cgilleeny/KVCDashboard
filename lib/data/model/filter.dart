@@ -51,10 +51,63 @@ class Filter {
 
   bool get isDefault {
     return byDate == DateFilter.none &&
-    byMLSymmetry == Classification.any &&
-    byHandLabeledSymmetry == Classification.any &&
-    byMLSingle == Classification.any &&
-    byHandLabeledSingle == Classification.any;
+        byMLSymmetry == Classification.any &&
+        byHandLabeledSymmetry == Classification.any &&
+        byMLSingle == Classification.any &&
+        byHandLabeledSingle == Classification.any;
+  }
+
+  String toAzureStorageParameters() {
+    String parameters = '';
+    if (byDate != DateFilter.none && range != null) {
+      parameters +=
+          'Timestamp ge datetime\'${range!.start.toIso8601String()}\' and Timestamp le datetime\'${range!.end.toIso8601String()}\'';
+
+    }
+    if (byMLSymmetry != Classification.any) {
+      if (parameters.isNotEmpty) {
+        parameters += ' and ';
+      }
+      parameters +=
+          'status_symmetry eq \'${fromClassification(byMLSymmetry)}\'';
+    }
+    if (byHandLabeledSymmetry != Classification.any) {
+      if (parameters.isNotEmpty) {
+        parameters += ' and ';
+      }
+      if (byHandLabeledSymmetry == Classification.unprocessed) {
+        parameters += 'not(symmetry_human_label gt \'\')';
+      } else {
+        parameters +=
+            'symmetry_human_label eq \'${fromClassification(byHandLabeledSymmetry)}\'';
+      }
+    }
+    if (byMLSingle != Classification.any) {
+      String classification = byMLSingle == Classification.error
+          ? 'unusable'
+          : fromClassification(byMLSingle);
+      if (parameters.isNotEmpty) {
+        parameters += ' and ';
+      }
+      parameters +=
+          '(left_ml_result eq \'$classification\' or right_ml_result eq \'$classification\')';
+    }
+    if (byHandLabeledSingle != Classification.any) {
+      String classification = byHandLabeledSingle == Classification.error
+          ? 'unusable'
+          : fromClassification(byHandLabeledSingle);
+      if (parameters.isNotEmpty) {
+        parameters += ' and ';
+      }
+      if (byHandLabeledSingle == Classification.unprocessed) {
+        parameters +=
+            '(not(left_human_label gt \'\') or not(right_human_label gt \'\'))';
+      } else {
+        parameters +=
+            '(left_human_label eq \'$classification\' or right_human_label eq \'$classification\')';
+      }
+    }
+    return parameters;
   }
 
   @override
@@ -73,8 +126,7 @@ class Filter {
         other.byMLSingle == byMLSingle &&
         other.byHandLabeledSingle == byHandLabeledSingle;
   }
-  
+
   @override
   int get hashCode => super.hashCode;
-  
 }

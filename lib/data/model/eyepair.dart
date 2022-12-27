@@ -49,15 +49,15 @@ class EyePair {
         timestamp = timestamp != null ? DateTime.parse(timestamp) : null;
 
   static EyePair fromMap(Map<String, dynamic> map) {
-    final left = Eye.fromMap(map, "left");
-    final right = Eye.fromMap(map, "right");
+    final left = Eye.fromJson(map, "left");
+    final right = Eye.fromJson(map, "right");
     return EyePair(
         left: left,
         right: right,
-        rowKey: map["RowKey"].runtimeType == String ? map["RowKey"] : 'Unknown RowKey',
+        rowKey: map["RowKey"].runtimeType == String ? map["RowKey"] : throw Exception('Invalid eye screening record.'),
         partitionKey: map["PartitionKey"].runtimeType == String
             ? map["PartitionKey"]
-            : null,
+            : 'main',
         timestamp:
             map["Timestamp"].runtimeType == String ? map["Timestamp"] : null,
         key: map["key"].runtimeType == String ? map["key"] : null,

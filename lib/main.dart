@@ -12,6 +12,8 @@ import 'cubit/dashboard_users_cubit.dart';
 import 'cubit/eyepair_cubit.dart';
 import 'data/eyepair/eyepair_repository_instance.dart';
 import 'screens/signin_page.dart';
+import 'keys/azure_connection_strings.dart';
+import 'package:azstore/azstore.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
 
   final authorizationRepository = AuthorizationRepository();
   final dashboardUserRepository =
-      DashboardUserRepository(DashboardUserNetworkService());
+      DashboardUserRepository(DashboardUserNetworkService(AzureStorage.parse(dashboardUserConnectionString), 'dashboardusers'));
   // final eyepairRepository = EyepairRepository(EyepairNetworkService());
 
   // This widget is the root of your application.
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               EyepairCubit(EyepairRepositoryInstance.repository),
-                // ..fetchFirstPage(),
+          // ..fetchFirstPage(),
         ),
       ],
       child: MaterialApp(

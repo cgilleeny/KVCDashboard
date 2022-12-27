@@ -13,11 +13,11 @@ class DashboardUser extends Equatable {
       required this.write,
       required this.admin});
 
-  DashboardUser.fromJson(Map<String, dynamic> map)
-      : email = map["RowKey"].runtimeType == String ? map["RowKey"] : 'unknown',
+  DashboardUser.fromJson(Map<String, dynamic> map) 
+      : email = map["RowKey"].runtimeType == String ? map["RowKey"] : throw Exception('Invalid dashboard user.') ,
         read = map["read"].runtimeType == bool ? map["read"] : false,
         write = map["write"].runtimeType == bool ? map["write"] : false,
-        admin = map["admin"].runtimeType == bool ? map["admin"] : false;
+        admin = map["admin"].runtimeType == bool ? map["admin"] : false; 
 
   String toJson() {
     const JsonEncoder encoder = JsonEncoder();
@@ -31,6 +31,16 @@ class DashboardUser extends Equatable {
     resBody["write"] = write;
     resBody["admin"] = admin;
     return encoder.convert(resBody);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "PartitionKey": "main",
+      "RowKey": email,
+      "read": read,
+      "write": write,
+      "admin": admin,
+    };
   }
 
   @override

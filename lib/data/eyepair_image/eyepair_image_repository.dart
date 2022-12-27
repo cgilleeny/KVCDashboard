@@ -1,6 +1,6 @@
 import 'dart:isolate';
 import 'dart:typed_data';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:go_check_kidz_dashboard/data/eyepair_image/eyepair_image_network_service.dart';
 import 'package:image/image.dart';
@@ -17,7 +17,8 @@ class ImageRepository {
     if (memoryImage != null) {
       return memoryImage;
     }
-    final imageBytes = await networkService.fetchImage(rowKey, suffix);
+    final imageBytes =
+        await networkService.fetchImage(rowKey, suffix);
     if (imageBytes != null) {
       if (cropBottom) {
         memoryImage = await _cropInBackground(imageBytes);

@@ -26,20 +26,34 @@ class Eye {
             : null,
         humanLabel = toClassification(humanLabel);
 
-  static Eye fromMap(Map<String, dynamic> map, String eye) {
-    return Eye(
-      map["${eye}_ml_result"].runtimeType == String
-          ? map["${eye}_ml_result"]
+  Eye.fromJson(Map<String, dynamic> map, String eye)
+  : mlResult = map["${eye}_ml_result"].runtimeType == String
+          ? toClassification(map["${eye}_ml_result"])
+          : Classification.unprocessed,
+      mlConfidenceNormal = map["${eye}_ml_confidence_normal"].runtimeType == String
+          ? double.tryParse(map["${eye}_ml_confidence_normal"])
           : null,
-      map["${eye}_ml_confidence_normal"].runtimeType == String
-          ? map["${eye}_ml_confidence_normal"]
+      mlConfidenceAbnormal = map["${eye}_ml_confidence_abnormal"].runtimeType == String
+          ? double.tryParse(map["${eye}_ml_confidence_abnormal"])
           : null,
-      map["${eye}_ml_confidence_abnormal"].runtimeType == String
-          ? map["${eye}_ml_confidence_abnormal"]
-          : null,
-      map["${eye}_human_label"].runtimeType == String
-          ? map["${eye}_human_label"]
-          : null,
-    );
-  }
+      humanLabel = map["${eye}_human_label"].runtimeType == String
+          ? toClassification(map["${eye}_human_label"])
+          : Classification.unprocessed;
+
+  // static Eye fromMap(Map<String, dynamic> map, String eye) {
+  //   return Eye(
+  //     map["${eye}_ml_result"].runtimeType == String
+  //         ? map["${eye}_ml_result"]
+  //         : null,
+  //     map["${eye}_ml_confidence_normal"].runtimeType == String
+  //         ? map["${eye}_ml_confidence_normal"]
+  //         : null,
+  //     map["${eye}_ml_confidence_abnormal"].runtimeType == String
+  //         ? map["${eye}_ml_confidence_abnormal"]
+  //         : null,
+  //     map["${eye}_human_label"].runtimeType == String
+  //         ? map["${eye}_human_label"]
+  //         : null,
+  //   );
+  // }
 }

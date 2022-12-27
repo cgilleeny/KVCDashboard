@@ -1,7 +1,6 @@
-import 'dart:convert';
-
+// import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:go_check_kidz_dashboard/data/eyepair/eyepair_network_service.dart';
-
 import '../model/eyepair.dart';
 import '../model/filter.dart';
 import '../model/page.dart';
@@ -19,8 +18,7 @@ class EyepairRepository {
     _filter = filter?.copyWith();
     _rowsPerPage = rowsPerPage;
 
-    final page = await networkService.fetchEyepairs(
-        filter, EyepairPage(<EyePair>[]), _rowsPerPage);
+    final page = await networkService.fetchEyepairs(filter, EyepairPage(<EyePair>[]), _rowsPerPage);
     page.pageIndex = 0;
     _pages = [page];
     return page;
@@ -37,11 +35,19 @@ class EyepairRepository {
     return page;
   }
 
+  // Future<String> updateEyepair(
+  //     String rowKey, Map<String, dynamic> map) async {
+  //   const JsonEncoder encoder = JsonEncoder();
+  //   final body = encoder.convert(map);
+  //   await networkService.updateEyepair(http.Client(), rowKey, body);
+  //   return map.values.first;
+  // }
+
   Future<String> updateEyepair(
       String rowKey, Map<String, dynamic> map) async {
-    const JsonEncoder encoder = JsonEncoder();
-    final body = encoder.convert(map);
-    await networkService.updateEyepair(rowKey, body);
+    // const JsonEncoder encoder = JsonEncoder();
+    // final body = encoder.convert(map);
+    await networkService.updateEyepair(rowKey, map);
     return map.values.first;
   }
 

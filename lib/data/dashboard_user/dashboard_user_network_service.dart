@@ -1,22 +1,35 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:flutter/foundation.dart';
-
-import 'package:http/http.dart' as http;
-
-import '../../azure.dart';
+// import 'package:go_check_kidz_dashboard/azure.dart';
+// import 'package:http/http.dart' as http;
+import 'package:azstore/azstore.dart';
+// import '../../azure.dart';
+// import '../../azure.dart';
 import '../../keys/azure_connection_strings.dart';
 import '../model/dashboard_user.dart';
 
-class DashboardUserNetworkService with Azure {
+// const String dashboardUserURL =
+//     'https://visionscreenerdata.table.core.windows.net/dashboardusers';
 
-  DashboardUserNetworkService();
+class DashboardUserNetworkService {
+  final AzureStorage storage;
+  final String tableName;
+  DashboardUserNetworkService(this.storage, this.tableName);
 
-  Future<void> insertDashboardUser(DashboardUser dashboardUser) async {
-    const String baseURL =
-        'https://visionscreenerdata.table.core.windows.net/dashboardusers';
-    // final azure = Azure(dashboardUserConnectionString);
-    final url = Uri.parse(baseURL);
-    return http
+  Future<void> upsertDashboardUser(DashboardUser dashboardUser) async {
+    // var storage = AzureStorage.parse(dashboardUserConnectionString);
+    return storage
+        .upsertTableRow(
+            tableName: tableName,
+            rowKey: dashboardUser.email,
+            partitionKey: 'main',
+            bodyMap: dashboardUser.toMap())
+        .catchError((error) {
+      throw Exception(error.toString());
+    });
+    /*
+    final url = Uri.parse(dashboardUserURL);
+    return client
         .post(url,
             headers:
                 getHeaders('dashboardusers', dashboardUserConnectionString),
@@ -30,17 +43,27 @@ class DashboardUserNetworkService with Azure {
     }).catchError((error) {
       throw Exception(error.toString());
     });
+    */
   }
-
+/*
   Future<void> updateDashboardUser(DashboardUser dashboardUser) async {
-    // const String dashboardUserConnectionString =
-    //     'DefaultEndpointsProtocol=https;AccountName=visionscreenerdata;AccountKey=0uJ5hDntTXDyBU/k3VW4xI8s0t+agn1LSZga39J04/Iz2MbCxHOj3/3aeKFKdeacSocW6/vOAD26ilVKYqFYRA==;EndpointSuffix=core.windows.net';
-    const String baseURL =
-        'https://visionscreenerdata.table.core.windows.net/dashboardusers';
-    // final azure = Azure(dashboardUserConnectionString);
+    // var storage = AzureStorage.parse(dashboardUserConnectionString);
+    return storage
+        .upsertTableRow(
+            tableName: tableName,
+            rowKey: dashboardUser.email,
+            partitionKey: 'main',
+            bodyMap: dashboardUser.toMap())
+        .catchError((error) {
+      throw Exception(error.toString());
+    });
+  }
+*/
+/*
+  Future<void> updateDashboardUser(http.Client client, DashboardUser dashboardUser) async {
     final url = Uri.parse(
-        '$baseURL(PartitionKey=\'main\',RowKey=\'${dashboardUser.email}\')');
-    return http
+        '$dashboardUserURL(PartitionKey=\'main\',RowKey=\'${dashboardUser.email}\')');
+    return client
         .put(url,
             headers: getHeaders('dashboardusers', dashboardUserConnectionString,
                 whereClause:
@@ -56,15 +79,44 @@ class DashboardUserNetworkService with Azure {
       throw Exception(error.toString());
     });
   }
+*/
 
   Future<List<DashboardUser>> fetchDashboardUsers() {
-    // const String dashboardUserConnectionString =
-    //     'DefaultEndpointsProtocol=https;AccountName=visionscreenerdata;AccountKey=0uJ5hDntTXDyBU/k3VW4xI8s0t+agn1LSZga39J04/Iz2MbCxHOj3/3aeKFKdeacSocW6/vOAD26ilVKYqFYRA==;EndpointSuffix=core.windows.net';
-    const String baseURL =
-        'https://visionscreenerdata.table.core.windows.net/dashboardusers';
-    // final azure = Azure(dashboardUserConnectionString);
-    final url = Uri.parse('$baseURL?\$top=100');
-    return http
+    // var storage = AzureStorage.parse(dashboardUserConnectionString);
+    return storage
+        .filterNextTableRows(
+            tableName: tableName,
+            // filter: '',
+            top: 100)
+        .then((map) {
+      final rows = map["Rows"];
+      if (rows == null) {
+        return throw Exception('Expected non-null rows from dadhboard users');
+      }
+      final List<DashboardUser> dashboardUsers = [];
+      for (var row in rows) {
+        try {
+          // final dashboardUser = DashboardUser.fromJson(row);
+          dashboardUsers.add(DashboardUser.fromJson(row));
+        } catch (error) {
+          if (kDebugMode) {
+            print(error.toString());
+          }
+        }
+      }
+      if (kDebugMode) {
+        print("Number of users: ${dashboardUsers.length}");
+      }
+      return dashboardUsers;
+    }).catchError((error) {
+      throw Exception(error.toString());
+    });
+  }
+/*
+
+  Future<List<DashboardUser>> fetchDashboardUsers(http.Client client) {  
+    final url = Uri.parse('$dashboardUserURL?\$top=100');
+    return client
         .get(
       url,
       headers: getHeaders('dashboardusers', dashboardUserConnectionString),
@@ -82,8 +134,15 @@ class DashboardUserNetworkService with Azure {
         expectedField('value');
       }
       final List<DashboardUser> dashboardUsers = [];
-      for (var dashboardUser in list) {
-        dashboardUsers.add(DashboardUser.fromJson(dashboardUser));
+      for (var jsonDashboardUser in list) {
+        try {
+          final dashboardUser = DashboardUser.fromJson(jsonDashboardUser);
+          dashboardUsers.add(dashboardUser);
+        } catch (error) {
+          if (kDebugMode) {
+            print(error.toString());
+          }
+        }
       }
       if (kDebugMode) {
         print("Number of users: ${dashboardUsers.length}");
@@ -93,4 +152,5 @@ class DashboardUserNetworkService with Azure {
       throw Exception(error.toString());
     });
   }
+*/
 }
