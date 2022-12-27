@@ -14,6 +14,10 @@ enum DateFilter {
 
   const DateFilter(this.title);
   final String title;
+
+  // factory DateFilter.fromTitle(String title) {
+  //   return values.firstWhere((e) => e.title == title);
+  // }
 }
 
 class Filter {

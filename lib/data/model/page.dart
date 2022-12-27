@@ -14,9 +14,3 @@ class EyepairPage {
       {this.nextPartitionKey, this.nextRowKey});
 }
 
-class AzurePage {
-  String partitionKey;
-  String rowKey;
-
-  AzurePage(this.partitionKey, this.rowKey);
-}

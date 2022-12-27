@@ -45,6 +45,9 @@ class EyepairNetworkService {
       final List<EyePair> eyepairs = [];
       for (var row in rows) {
         try {
+                    if (kDebugMode) {
+            print(row);
+          }
           eyepairs.add(EyePair.fromMap(row));
         } catch (error) {
           if (kDebugMode) {
